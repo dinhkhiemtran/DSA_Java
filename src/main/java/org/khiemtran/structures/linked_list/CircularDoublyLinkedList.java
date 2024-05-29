@@ -2,16 +2,20 @@ package org.khiemtran.structures.linked_list;
 
 import java.util.NoSuchElementException;
 
-public class DoublyLinkedList<T> {
+public class CircularDoublyLinkedList<T> {
   public static class Node<T> {
     private Node<T> next;
     private Node<T> previous;
     private final T data;
 
     public Node(T data) {
-      this.data = data;
       this.next = null;
       this.previous = null;
+      this.data = data;
+    }
+
+    public T getData() {
+      return data;
     }
 
     public Node<T> getNext() {
@@ -20,10 +24,6 @@ public class DoublyLinkedList<T> {
 
     public Node<T> getPrevious() {
       return previous;
-    }
-
-    public T getData() {
-      return data;
     }
 
     public void setNext(Node<T> next) {
@@ -39,7 +39,7 @@ public class DoublyLinkedList<T> {
   private Node<T> tail;
   private int size;
 
-  public DoublyLinkedList() {
+  public CircularDoublyLinkedList() {
     this.head = null;
     this.tail = null;
     this.size = 0;
@@ -66,6 +66,8 @@ public class DoublyLinkedList<T> {
       newNode.setPrevious(tail);
     }
     tail = newNode;
+    tail.setNext(head);
+    head.setPrevious(tail);
     this.size++;
     return true;
   }
@@ -79,6 +81,8 @@ public class DoublyLinkedList<T> {
       newNode.setPrevious(tail);
     }
     tail = newNode;
+    tail.setNext(head);
+    head.setPrevious(tail);
     this.size++;
   }
 
@@ -91,76 +95,13 @@ public class DoublyLinkedList<T> {
       head.setPrevious(newNode);
     }
     head = newNode;
+    head.setPrevious(tail);
+    tail.setNext(head);
     this.size++;
   }
 
   public void add(int index, T data) {
-    if (index <= 0 || index >= size) {
-      throw new IllegalArgumentException("Invalid position");
-    }
     Node<T> newNode = new Node<>(data);
-    Node<T> current = head;
-    for (int i = 1; i < index; i++) {
-      current = current.getNext();
-    }
-    newNode.setNext(current.getNext());
-    current.setNext(newNode);
-    this.size++;
-  }
-
-  public boolean remove() {
-    if (head == null || size == 0) {
-      return false;
-    }
-    if (head.getNext() == null || size == 1) {
-      head = null;
-      tail = null;
-    } else {
-      tail = tail.getPrevious();
-      tail.setNext(null);
-    }
-    this.size--;
-    return true;
-  }
-
-  public T removeLast() {
-    T data;
-    if (head == null || size == 0) {
-      throw new NoSuchElementException("Linked list has no elements.");
-    }
-    if (head.getNext() == null || size == 1) {
-      data = head.getData();
-      head = null;
-      tail = null;
-    } else {
-      data = tail.getData();
-      tail = tail.getPrevious();
-      tail.setNext(null);
-    }
-    this.size--;
-    return data;
-  }
-
-  public T removeFirst() {
-    T data;
-    if (head == null || size == 0) {
-      throw new NoSuchElementException("Linked list has no elements.");
-    }
-    if (head.getNext() == null || size == 1) {
-      data = head.getData();
-      head = null;
-      tail = null;
-    } else {
-      data = head.getData();
-      head = head.getNext();
-      head.setPrevious(null);
-    }
-    this.size--;
-    return data;
-  }
-
-  public T remove(int index) {
-    T data;
     Node<T> current = head;
     if (index <= 0 || index >= size) {
       throw new IndexOutOfBoundsException("Invalid position");
@@ -168,7 +109,76 @@ public class DoublyLinkedList<T> {
     for (int i = 1; i < index; i++) {
       current = current.getNext();
     }
-    data = current.getNext().getData();
+    newNode.setNext(current.getNext());
+    newNode.setPrevious(current);
+    current.getNext().setPrevious(newNode);
+    current.setNext(newNode);
+    this.size++;
+  }
+
+  public boolean remove() {
+    if (head == null) {
+      return false;
+    }
+    if (head == tail || size == 1) {
+      head = null;
+      tail = null;
+    } else {
+      tail = tail.getPrevious();
+      tail.setNext(head);
+      head.setPrevious(tail);
+    }
+    this.size--;
+    return true;
+  }
+
+  public T removeLast() {
+    T data;
+    if (head == null) {
+      throw new NoSuchElementException("Linked list has no elements.");
+    }
+    if (head == tail || size == 1) {
+      data = tail.getData();
+      head = null;
+      tail = null;
+    } else {
+      data = tail.getData();
+      tail = tail.getPrevious();
+      tail.setNext(head);
+      head.setPrevious(tail);
+    }
+    this.size--;
+    return data;
+  }
+
+  public T removeHead() {
+    T data;
+    if (head == null || size == 0) {
+      throw new NoSuchElementException("Linked list has no elements.");
+    }
+    if (head == tail || size == 1) {
+      data = tail.getData();
+      head = null;
+      tail = null;
+    } else {
+      data = head.getData();
+      head = head.getNext();
+      head.setPrevious(tail);
+      tail.setNext(head);
+    }
+    this.size--;
+    return data;
+  }
+
+  public T remove(int index) {
+    Node<T> current = head;
+    if (index <= 0 || index >= size) {
+      throw new IndexOutOfBoundsException("Invalid position");
+    }
+    for (int i = 1; i < index; i++) {
+      current = current.getNext();
+    }
+    T data = current.getNext().getData();
     current.getNext().getNext().setPrevious(current);
     current.setNext(current.getNext().getNext());
     this.size--;
@@ -177,9 +187,13 @@ public class DoublyLinkedList<T> {
 
   public void display() {
     Node<T> current = head;
-    while (current != null) {
-      System.out.println(current.getData());
-      current = current.getNext();
+    try {
+      do {
+        System.out.println(current.getData());
+        current = current.getNext();
+      } while (current != head);
+    } catch (NullPointerException e) {
+      throw new NoSuchElementException("Linked list has no elements");
     }
   }
 }

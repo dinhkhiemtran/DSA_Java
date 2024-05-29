@@ -1,5 +1,7 @@
 package org.khiemtran.structures.linked_list;
 
+import java.util.NoSuchElementException;
+
 public class CircularSinglyLinkedList<T> {
   public static class Node<T> {
     private Node<T> next;
@@ -34,10 +36,29 @@ public class CircularSinglyLinkedList<T> {
     return size;
   }
 
-  public void add(T data) {
+  public boolean add(T data) {
     Node<T> newNode = new Node<>(data);
-    if (head == null) {
+    if (head == null || size == 0) {
       head = newNode;
+      head.setNext(head);
+    } else {
+      Node<T> current = head;
+      while (current.getNext() != head) {
+        current = current.getNext();
+      }
+      current.setNext(newNode);
+      current = newNode;
+      current.setNext(head);
+    }
+    this.size++;
+    return true;
+  }
+
+  public void addLast(T data) {
+    Node<T> newNode = new Node<>(data);
+    if (head == null || size == 0) {
+      head = newNode;
+      head.setNext(head);
     } else {
       Node<T> current = head;
       while (current.getNext() != head) {
@@ -49,12 +70,60 @@ public class CircularSinglyLinkedList<T> {
     this.size++;
   }
 
-  public T remove() {
+  public void addFirst(T data) {
+    Node<T> newNode = new Node<>(data);
+    Node<T> current = head;
+    if (head == null || size == 0) {
+      head = newNode;
+      head.setNext(head);
+    } else {
+      while (current.getNext() != head) {
+        current = current.getNext();
+      }
+      newNode.setNext(head);
+      head = newNode;
+      current.setNext(newNode);
+    }
+    this.size++;
+  }
+
+  public void add(int index, T data) {
+    Node<T> newNode = new Node<>(data);
+    Node<T> current = head;
+    if (index <= 0 || index >= size) {
+      throw new IndexOutOfBoundsException("Invalid position.");
+    }
+    for (int i = 1; i < index; i++) {
+      current = current.getNext();
+    }
+    newNode.setNext(current.getNext());
+    current.setNext(newNode);
+    this.size++;
+  }
+
+  public boolean remove() {
+    if (head == null || size == 0) {
+      return false;
+    }
+    if (head.getNext() == null || size == 1) {
+      head = null;
+    } else {
+      Node<T> current = head;
+      while (current.getNext().getNext() != head) {
+        current = current.getNext();
+      }
+      current.setNext(head);
+    }
+    this.size--;
+    return true;
+  }
+
+  public T removeLast() {
     T data;
     if (head == null) {
-      throw new IllegalArgumentException("Linked List is empty");
+      throw new NoSuchElementException("Linked list has no elements.");
     }
-    if (size == 1) {
+    if (head.getNext() == null || size == 1) {
       data = head.getData();
       head = null;
     } else {
@@ -70,27 +139,25 @@ public class CircularSinglyLinkedList<T> {
     return data;
   }
 
-  public void insert(T data, int index) {
-    Node<T> newNode = new Node<>(data);
+  public T removeFirst() {
     Node<T> current = head;
-    if (index < 0 || index >= size) {
-      throw new IndexOutOfBoundsException("Invalid position.");
+    T data;
+    if (head == null || size == 0) {
+      throw new NoSuchElementException("Linked list has no elements.");
     }
-    if (index == 0) {
+    if (head.getNext() == null || size == 1) {
+      data = head.getData();
+      head = null;
+    } else {
       while (current.getNext() != head) {
         current = current.getNext();
       }
-      newNode.setNext(head);
-      head = newNode;
+      data = head.getData();
+      head = head.getNext();
       current.setNext(head);
-    } else {
-      for (int i = 1; i < index; i++) {
-        current = current.getNext();
-      }
-      newNode.setNext(current.getNext());
-      current.setNext(newNode);
     }
-    this.size++;
+    this.size--;
+    return data;
   }
 
   public T remove(int index) {
@@ -99,36 +166,27 @@ public class CircularSinglyLinkedList<T> {
     if (head == null || size == 0) {
       throw new IllegalArgumentException("Invalid position.");
     }
-    if (index < 0 || index >= size) {
+    if (index <= 0 || index >= size) {
       throw new IndexOutOfBoundsException("Invalid position");
     }
-    if (index == 0) {
-      data = head.getData();
-      if (size == 1) {
-        head = null;
-      } else {
-        while (current.getNext() != head) {
-          current = current.getNext();
-        }
-        current.setNext(head.getNext());
-        head = head.getNext();
-      }
-    } else {
-      for (int i = 1; i < index; i++) {
-        current = current.getNext();
-      }
-      data = current.getNext().getData();
-      current.setNext(current.getNext().getNext());
+    for (int i = 1; i < index; i++) {
+      current = current.getNext();
     }
+    data = current.getNext().getData();
+    current.setNext(current.getNext().getNext());
     this.size--;
     return data;
   }
 
   public void display() {
     Node<T> current = head;
-    do {
-      System.out.println(current.getData());
-      current = current.getNext();
-    } while (current != head);
+    try {
+      do {
+        System.out.println(current.getData());
+        current = current.getNext();
+      } while (current != head);
+    } catch (NullPointerException e) {
+      throw new NoSuchElementException("Linked list has no element");
+    }
   }
 }
