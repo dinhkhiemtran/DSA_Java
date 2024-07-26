@@ -17,4 +17,32 @@ class BinaryTreeTest {
     binaryTree.inorder(binaryTree.getRoot());
     binaryTree.postorder(binaryTree.getRoot());
   }
+
+  @Test
+  public void notFullBinaryTree() {
+    BinaryTree<Integer> binaryTree = new BinaryTree<>();
+    binaryTree.setRoot(new Node<>(0));
+    binaryTree.getRoot().setLeft(new Node<>(1));
+    binaryTree.getRoot().setRight(new Node<>(2));
+    binaryTree.getRoot().getLeft().setLeft(new Node<>(3));
+    binaryTree.getRoot().getLeft().setRight(new Node<>(4));
+    binaryTree.getRoot().getRight().setLeft(new Node<>(5));
+    Assertions.assertFalse(binaryTree.isFullBinaryTree(binaryTree.getRoot()));
+  }
+
+  @Test
+  public void isFullBinaryTree() {
+    BinaryTree<Integer> binaryTree = new BinaryTree<>();
+    binaryTree.setRoot(new Node<>(1));
+    Assertions.assertTrue(binaryTree.isFullBinaryTree(binaryTree.getRoot()));
+    binaryTree.getRoot().setLeft(new Node<>(2));
+    binaryTree.getRoot().getLeft().setLeft(new Node<>(4));
+    binaryTree.getRoot().getLeft().setRight(new Node<>(5));
+    binaryTree.getRoot().getLeft().getRight().setLeft(new Node<>(6));
+    binaryTree.getRoot().getLeft().getRight().setRight(new Node<>(7));
+    binaryTree.getRoot().setRight(new Node<>(3));
+    binaryTree.preorder(binaryTree.getRoot());
+    Assertions.assertTrue(binaryTree.isFullBinaryTree(binaryTree.getRoot()));
+    Assertions.assertEquals(4, binaryTree.getMaxDepth(binaryTree.getRoot()));
+  }
 }

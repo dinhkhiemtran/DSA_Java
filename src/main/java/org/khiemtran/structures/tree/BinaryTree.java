@@ -44,4 +44,27 @@ public class BinaryTree<T> {
     postorder(node.getLeft());
     System.out.println(node.getData());
   }
+
+  public int getMaxDepth(Node<T> node) {
+    if (node == null) {
+      return 0;
+    } else {
+      int leftDepth = getMaxDepth(node.getLeft());
+      int rightDepth = getMaxDepth(node.getRight());
+      return Math.max(leftDepth, rightDepth) + 1;
+    }
+  }
+
+  public boolean isFullBinaryTree(Node<T> node) {
+    if (node == null) {
+      return true;
+    }
+    if (node.getLeft() == null && node.getRight() == null) {
+      return true;
+    }
+    if (node.getLeft() != null && node.getRight() != null) {
+      return isFullBinaryTree(node.getLeft()) && isFullBinaryTree(node.getRight());
+    }
+    return false;
+  }
 }
