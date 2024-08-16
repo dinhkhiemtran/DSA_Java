@@ -1,7 +1,7 @@
 package org.khiemtran.structures.tree;
 
 public class Node<T> {
-  private T data;
+  private final T data;
   private Node<T> right;
   private Node<T> left;
 
@@ -21,10 +21,6 @@ public class Node<T> {
 
   public Node<T> getLeft() {
     return left;
-  }
-
-  public void setData(T data) {
-    this.data = data;
   }
 
   public void setRight(Node<T> right) {
