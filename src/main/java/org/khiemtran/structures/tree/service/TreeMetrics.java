@@ -14,4 +14,6 @@ public interface TreeMetrics<T> {
   boolean isPerfectBinaryTree(Node<T> node);
 
   boolean isCompleteBinaryTree(Node<T> node);
+
+  boolean isBalancedBinaryTree(Node<T> node);
 }
