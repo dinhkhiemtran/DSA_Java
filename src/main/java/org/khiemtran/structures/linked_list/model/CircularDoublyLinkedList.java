@@ -1,4 +1,4 @@
-package org.khiemtran.structures.linked_list;
+package org.khiemtran.structures.linked_list.model;
 
 import java.util.NoSuchElementException;
 
