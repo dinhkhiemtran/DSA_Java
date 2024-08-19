@@ -35,7 +35,7 @@ class SingleLinkedListServiceTest<T> {
   public void removeElement() {
     service = new SinglyLinkedListService<>(singlyLinkedList, operations);
     service.add(1);
-    Node<Object> removedNode = service.remove();
+    Node<Object> removedNode = service.removeLast();
     Assertions.assertEquals(1, removedNode.getData());
     service.add(1);
     service.add(2);
@@ -47,8 +47,8 @@ class SingleLinkedListServiceTest<T> {
     Assertions.assertEquals(5, size);
     Assertions.assertEquals(1, head.getData());
     Assertions.assertEquals(2, head.getNext().getData());
-    Assertions.assertEquals(5, service.remove().getData());
-    Assertions.assertEquals(4, service.remove().getData());
+    Assertions.assertEquals(5, service.removeLast().getData());
+    Assertions.assertEquals(4, service.removeLast().getData());
     Assertions.assertEquals(3, head.getNext().getNext().getData());
     service.view();
   }
@@ -57,7 +57,7 @@ class SingleLinkedListServiceTest<T> {
   public void removeWhenLinkedListEmpty() {
     service = new SinglyLinkedListService<>(singlyLinkedList, operations);
     IndexOutOfBoundsException indexOutOfBoundsException = Assertions.assertThrows(IndexOutOfBoundsException.class,
-        () -> service.remove());
+        () -> service.removeLast());
     Assertions.assertEquals("Linked list empty.", indexOutOfBoundsException.getMessage());
   }
 
@@ -71,12 +71,12 @@ class SingleLinkedListServiceTest<T> {
     Assertions.assertEquals(2, head.getNext().getData());
     IndexOutOfBoundsException indexOutOfBoundsException = Assertions.assertThrows(IndexOutOfBoundsException.class,
         () -> service.insert(0, 0));
-    Assertions.assertEquals("Index out of size", indexOutOfBoundsException.getMessage());
+    Assertions.assertEquals("Index " + 0 + " is out of bounds. Size: " + singlyLinkedList.getSize(), indexOutOfBoundsException.getMessage());
     IndexOutOfBoundsException ofBoundsExceptionLast = Assertions.assertThrows(IndexOutOfBoundsException.class,
         () -> service.insert(4, 3));
-    Assertions.assertEquals("Index out of size", ofBoundsExceptionLast.getMessage());
+    Assertions.assertEquals("Index " + 3 + " is out of bounds. Size: " + singlyLinkedList.getSize(), ofBoundsExceptionLast.getMessage());
     service.insert(0, 2);
     Assertions.assertEquals(0, head.getNext().getNext().getData());
-    service.view();
+    System.out.println(service.view());
   }
 }

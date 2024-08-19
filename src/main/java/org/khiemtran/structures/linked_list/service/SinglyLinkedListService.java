@@ -19,22 +19,25 @@ public class SinglyLinkedListService<T> {
   public void add(T data) {
     Node<T> head = operations.add(data);
     linkedList.setHead(head);
-    linkedList.setSize(linkedList.getSize() + 1);
+    updateSize(1);
   }
 
-  public Node<T> remove() {
+  public Node<T> removeLast() {
     Node<T> removedNode = operations.remove();
-    linkedList.setSize(linkedList.getSize() - 1);
+    updateSize(-1);
     return removedNode;
   }
 
   public void insert(T data, int index) {
     operations.insert(data, index, linkedList.getSize());
-    linkedList.setSize(linkedList.getSize() + 1);
+    updateSize(1);
   }
 
-  public void view() {
-    String display = this.operations.display();
-    System.out.println(display);
+  public String view() {
+    return operations.display();
+  }
+
+  private void updateSize(int delta) {
+    linkedList.setSize(linkedList.getSize() + delta);
   }
 }

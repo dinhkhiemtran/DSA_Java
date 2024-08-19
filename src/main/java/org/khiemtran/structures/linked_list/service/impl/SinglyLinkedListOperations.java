@@ -60,7 +60,7 @@ public class SinglyLinkedListOperations<T> implements LinkedListOperations<T> {
   @Override
   public void insert(T data, int index, int size) {
     if (index <= 0 || index >= size) {
-      throw new IndexOutOfBoundsException("Index out of size");
+      throw new IndexOutOfBoundsException("Index " + index + " is out of bounds. Size: " + size);
     } else {
       Node<T> current = this.head;
       int currentIndex = 0;
