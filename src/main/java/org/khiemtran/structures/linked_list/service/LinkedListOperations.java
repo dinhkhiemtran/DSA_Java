@@ -7,7 +7,7 @@ public interface LinkedListOperations<T> {
 
   Node<T> remove();
 
-  Node<T> getHead();
-
   String display();
+
+  void insert(T data, int index, int size);
 }

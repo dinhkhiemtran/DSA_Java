@@ -5,22 +5,22 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.khiemtran.structures.linked_list.model.Node;
 import org.khiemtran.structures.linked_list.model.SinglyLinkedList;
-import org.khiemtran.structures.linked_list.service.impl.SingleLinkedListOperations;
+import org.khiemtran.structures.linked_list.service.impl.SinglyLinkedListOperations;
 
 class SingleLinkedListServiceTest<T> {
-  private SingleLinkedListService<Object> service;
+  private SinglyLinkedListService<Object> service;
   private LinkedListOperations<Object> operations;
   private SinglyLinkedList<Object> singlyLinkedList;
 
   @BeforeEach
   public void init() {
-    operations = new SingleLinkedListOperations<>();
+    operations = new SinglyLinkedListOperations<>();
     singlyLinkedList = new SinglyLinkedList<>();
   }
 
   @Test
   public void addElement() {
-    service = new SingleLinkedListService<>(singlyLinkedList, operations);
+    service = new SinglyLinkedListService<>(singlyLinkedList, operations);
     service.add(1);
     service.add(2);
     service.add(3);
@@ -33,7 +33,7 @@ class SingleLinkedListServiceTest<T> {
 
   @Test
   public void removeElement() {
-    service = new SingleLinkedListService<>(singlyLinkedList, operations);
+    service = new SinglyLinkedListService<>(singlyLinkedList, operations);
     service.add(1);
     Node<Object> removedNode = service.remove();
     Assertions.assertEquals(1, removedNode.getData());
@@ -55,9 +55,28 @@ class SingleLinkedListServiceTest<T> {
 
   @Test
   public void removeWhenLinkedListEmpty() {
-    service = new SingleLinkedListService<>(singlyLinkedList, operations);
+    service = new SinglyLinkedListService<>(singlyLinkedList, operations);
     IndexOutOfBoundsException indexOutOfBoundsException = Assertions.assertThrows(IndexOutOfBoundsException.class,
         () -> service.remove());
     Assertions.assertEquals("Linked list empty.", indexOutOfBoundsException.getMessage());
+  }
+
+  @Test
+  public void insert() {
+    service = new SinglyLinkedListService<>(singlyLinkedList, operations);
+    service.add(1);
+    service.add(3);
+    service.insert(2, 1);
+    Node<Object> head = singlyLinkedList.getHead();
+    Assertions.assertEquals(2, head.getNext().getData());
+    IndexOutOfBoundsException indexOutOfBoundsException = Assertions.assertThrows(IndexOutOfBoundsException.class,
+        () -> service.insert(0, 0));
+    Assertions.assertEquals("Index out of size", indexOutOfBoundsException.getMessage());
+    IndexOutOfBoundsException ofBoundsExceptionLast = Assertions.assertThrows(IndexOutOfBoundsException.class,
+        () -> service.insert(4, 3));
+    Assertions.assertEquals("Index out of size", ofBoundsExceptionLast.getMessage());
+    service.insert(0, 2);
+    Assertions.assertEquals(0, head.getNext().getNext().getData());
+    service.view();
   }
 }
