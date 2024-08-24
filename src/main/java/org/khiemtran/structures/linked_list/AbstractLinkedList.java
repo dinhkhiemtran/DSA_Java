@@ -34,6 +34,11 @@ public abstract class AbstractLinkedList<T> implements LinkedListOperations<T> {
   }
 
   @Override
+  public boolean isEmpty() {
+    return head == null;
+  }
+
+  @Override
   public String display() {
     StringBuilder sb = new StringBuilder();
     Node<T> current = head;

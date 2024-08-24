@@ -26,4 +26,6 @@ public interface LinkedListOperations<T> {
   Node<T> removeIndex(int index);
 
   Node<T> getNodeAt(int index);
+
+  boolean isEmpty();
 }

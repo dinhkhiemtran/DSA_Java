@@ -119,10 +119,6 @@ public class DoublyLinkedList<T> extends AbstractLinkedList<T> {
     return current;
   }
 
-  public boolean isEmpty() {
-    return head == null;
-  }
-
   private void validateIndex(int index) {
     if (index < 0 || index >= size) {
       throw new IndexOutOfBoundsException("Index " + index + " out of bounds for size " + size);

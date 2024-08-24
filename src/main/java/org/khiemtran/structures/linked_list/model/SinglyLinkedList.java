@@ -1,7 +1,6 @@
 package org.khiemtran.structures.linked_list.model;
 
 import org.khiemtran.structures.linked_list.AbstractLinkedList;
-import org.khiemtran.structures.linked_list.model.Node;
 
 public class SinglyLinkedList<T> extends AbstractLinkedList<T> {
   public SinglyLinkedList() {
@@ -11,7 +10,7 @@ public class SinglyLinkedList<T> extends AbstractLinkedList<T> {
   @Override
   public void addLast(T data) {
     Node<T> newNode = new Node<>(data);
-    if (head == null) {
+    if (isEmpty()) {
       this.head = newNode;
     } else {
       Node<T> lastNode = getNodeAt(getSize() - 1);
@@ -22,7 +21,7 @@ public class SinglyLinkedList<T> extends AbstractLinkedList<T> {
 
   @Override
   public Node<T> removeLast() {
-    if (head == null) {
+    if (isEmpty()) {
       throw new IndexOutOfBoundsException("Linked list is empty.");
     }
     if (head.getNext() == null) {
@@ -66,7 +65,7 @@ public class SinglyLinkedList<T> extends AbstractLinkedList<T> {
 
   @Override
   public Node<T> removeFirst() {
-    if (head == null) {
+    if (isEmpty()) {
       throw new IndexOutOfBoundsException("Linked List empty.");
     }
     Node<T> removedNode = head;
