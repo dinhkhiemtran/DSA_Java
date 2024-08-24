@@ -10,66 +10,145 @@ public class DoublyLinkedList<T> extends AbstractLinkedList<T> {
   @Override
   public void addLast(T data) {
     Node<T> newNode = new Node<>(data);
-    if (head == null) {
-      super.head = newNode;
+    if (isEmpty()) {
+      head = newNode;
     } else {
       tail.setNext(newNode);
       newNode.setPrevious(tail);
     }
+    tail = newNode;
     incrementSize();
-    super.tail = newNode;
   }
 
   @Override
   public Node<T> removeLast() {
-    Node<T> removedNode;
-    if (isEmpty()) {
-      throw new IndexOutOfBoundsException("Doubly linked list is empty.");
-    }
+    validateNonEmpty();
+    Node<T> removedNode = tail;
     if (head == tail) {
-      removedNode = head;
-      head = null;
-      tail = null;
-      setSize(0);
+      clearList();
     } else {
-      removedNode = tail;
       tail = tail.getPrevious();
-      tail.setNext(null);
+      if (tail != null) {
+        tail.setNext(null);
+      }
     }
+    clearNodeReferences(removedNode);
     decrementSize();
     return removedNode;
   }
 
   @Override
   public void insert(T data, int index) {
+    validateIndexForInsert(index);
+    if (index == 0) {
+      addFirst(data);
+    } else if (index == size) {
+      addLast(data);
+    } else {
+      Node<T> newNode = new Node<>(data);
+      Node<T> current = getNodeAt(index);
+      Node<T> prev = current.getPrevious();
+      prev.setNext(newNode);
+      newNode.setPrevious(prev);
+      newNode.setNext(current);
+      current.setPrevious(newNode);
+      incrementSize();
+    }
   }
 
   @Override
   public void addFirst(T data) {
+    Node<T> newNode = new Node<>(data);
+    if (isEmpty()) {
+      tail = newNode;
+    } else {
+      newNode.setNext(head);
+      head.setPrevious(newNode);
+    }
+    head = newNode;
+    incrementSize();
   }
 
   @Override
   public Node<T> removeFirst() {
-    return null;
+    validateNonEmpty();
+    Node<T> removedNode = head;
+    if (head == tail) {
+      clearList();
+    } else {
+      head = head.getNext();
+      if (head != null) {
+        head.setPrevious(null);
+      }
+    }
+    clearNodeReferences(removedNode);
+    decrementSize();
+    return removedNode;
   }
 
   @Override
   public Node<T> removeIndex(int index) {
-    return null;
+    validateNonEmpty();
+    validateIndex(index);
+    if (index == 0) {
+      return removeFirst();
+    } else if (index == size - 1) {
+      return removeLast();
+    }
+    Node<T> nodeToRemove = getNodeAt(index);
+    Node<T> prev = nodeToRemove.getPrevious();
+    Node<T> next = nodeToRemove.getNext();
+    if (prev != null) {
+      prev.setNext(next);
+    }
+    if (next != null) {
+      next.setPrevious(prev);
+    }
+    clearNodeReferences(nodeToRemove);
+    decrementSize();
+    return nodeToRemove;
   }
 
   @Override
   public Node<T> getNodeAt(int index) {
+    validateIndex(index);
     Node<T> current = head;
-    int currentIndex = 0;
-    while (current != null && currentIndex < index) {
+    for (int i = 0; i < index; i++) {
       current = current.getNext();
-      currentIndex++;
     }
     return current;
   }
 
   public boolean isEmpty() {
-    return super.head == null;
+    return head == null;
+  }
+
+  private void validateIndex(int index) {
+    if (index < 0 || index >= size) {
+      throw new IndexOutOfBoundsException("Index " + index + " out of bounds for size " + size);
+    }
+  }
+
+  private void validateIndexForInsert(int index) {
+    if (index < 0 || index > size) {
+      throw new IndexOutOfBoundsException("Index " + index + " out of bounds for size " + size);
+    }
+  }
+
+  private void validateNonEmpty() {
+    if (isEmpty()) {
+      throw new IndexOutOfBoundsException("Doubly linked list is empty.");
+    }
+  }
+
+  private void clearList() {
+    head = null;
+    tail = null;
+    setSize(0);
+  }
+
+  private void clearNodeReferences(Node<T> node) {
+    node.setNext(null);
+    node.setPrevious(null);
   }
 }

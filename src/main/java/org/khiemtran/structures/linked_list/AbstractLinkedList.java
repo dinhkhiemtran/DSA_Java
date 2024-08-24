@@ -5,18 +5,17 @@ import org.khiemtran.structures.linked_list.model.Node;
 public abstract class AbstractLinkedList<T> implements LinkedListOperations<T> {
   protected Node<T> head;
   protected Node<T> tail;
-
-  @Override
-  public void setSize(int size) {
-    this.size = size;
-  }
-
   protected int size;
 
   public AbstractLinkedList() {
     this.head = null;
     this.tail = null;
     this.size = 0;
+  }
+
+  @Override
+  public void setSize(int size) {
+    this.size = size;
   }
 
   @Override
