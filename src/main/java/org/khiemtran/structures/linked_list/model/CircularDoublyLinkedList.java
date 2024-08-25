@@ -1,199 +1,165 @@
 package org.khiemtran.structures.linked_list.model;
 
-import java.util.NoSuchElementException;
+import org.khiemtran.structures.linked_list.AbstractLinkedList;
 
-public class CircularDoublyLinkedList<T> {
-  public static class Node<T> {
-    private Node<T> next;
-    private Node<T> previous;
-    private final T data;
-
-    public Node(T data) {
-      this.next = null;
-      this.previous = null;
-      this.data = data;
-    }
-
-    public T getData() {
-      return data;
-    }
-
-    public Node<T> getNext() {
-      return next;
-    }
-
-    public Node<T> getPrevious() {
-      return previous;
-    }
-
-    public void setNext(Node<T> next) {
-      this.next = next;
-    }
-
-    public void setPrevious(Node<T> previous) {
-      this.previous = previous;
-    }
-  }
-
-  private Node<T> head;
-  private Node<T> tail;
-  private int size;
-
-  public CircularDoublyLinkedList() {
-    this.head = null;
-    this.tail = null;
-    this.size = 0;
-  }
-
-  public Node<T> getHead() {
-    return head;
-  }
-
-  public Node<T> getTail() {
-    return tail;
-  }
-
-  public int getSize() {
-    return size;
-  }
-
-  public boolean add(T data) {
-    Node<T> newNode = new Node<>(data);
-    if (head == null || size == 0) {
-      head = newNode;
-    } else {
-      tail.setNext(newNode);
-      newNode.setPrevious(tail);
-    }
-    tail = newNode;
-    tail.setNext(head);
-    head.setPrevious(tail);
-    this.size++;
-    return true;
-  }
-
+public class CircularDoublyLinkedList<T> extends AbstractLinkedList<T> {
+  @Override
   public void addLast(T data) {
     Node<T> newNode = new Node<>(data);
-    if (head == null || size == 0) {
-      head = newNode;
+    if (isEmpty()) {
+      super.head = newNode;
+      super.tail = newNode;
+      newNode.setNext(newNode);
+      newNode.setPrevious(newNode);
     } else {
-      tail.setNext(newNode);
-      newNode.setPrevious(tail);
+      newNode.setPrevious(super.tail);
+      super.tail.setNext(newNode);
+      super.tail = newNode;
+      super.tail.setNext(super.head);
+      super.head.setPrevious(super.tail);
     }
-    tail = newNode;
-    tail.setNext(head);
-    head.setPrevious(tail);
-    this.size++;
+    incrementSize();
   }
 
+  @Override
+  public Node<T> removeLast() {
+    validateEmpty();
+    Node<T> removedNode = super.tail;
+    if (super.head == super.tail) {
+      clearCircularDoublyLinkedList();
+      return removedNode;
+    }
+    super.tail = super.tail.getPrevious();
+    clearNodeReferences(removedNode);
+    super.tail.setNext(super.head);
+    super.head.setPrevious(super.tail);
+    decrementSize();
+    return removedNode;
+  }
+
+  @Override
+  public void insert(T data, int index) {
+    int size = getSize();
+    if (index < 0 || index > size) {
+      throw new IndexOutOfBoundsException("Index " + index + " out of bounds for size " + size);
+    }
+    if (index == 0) {
+      addFirst(data);
+      return;
+    }
+    if (index == size) {
+      addLast(data);
+      return;
+    }
+    Node<T> newNode = new Node<>(data);
+    Node<T> previousNode = getNodeAt(index - 1);
+    Node<T> nextNode = previousNode.getNext();
+    newNode.setNext(nextNode);
+    newNode.setPrevious(previousNode);
+    previousNode.setNext(newNode);
+    if (nextNode != null) {
+      nextNode.setPrevious(newNode);
+    }
+    incrementSize();
+    if (index == size - 1) {
+      tail.setNext(head);
+      head.setPrevious(tail);
+    }
+  }
+
+  @Override
   public void addFirst(T data) {
     Node<T> newNode = new Node<>(data);
-    if (head == null || size == 0) {
-      tail = newNode;
+    if (isEmpty()) {
+      super.tail = newNode;
+      super.head = newNode;
+      newNode.setNext(newNode);
+      newNode.setPrevious(newNode);
     } else {
-      newNode.setNext(head);
-      head.setPrevious(newNode);
+      newNode.setNext(super.head);
+      newNode.setPrevious(super.tail);
+      super.head.setPrevious(newNode);
+      super.tail.setNext(newNode);
+      super.head = newNode;
     }
-    head = newNode;
-    head.setPrevious(tail);
-    tail.setNext(head);
-    this.size++;
+    incrementSize();
   }
 
-  public void add(int index, T data) {
-    Node<T> newNode = new Node<>(data);
-    Node<T> current = head;
-    if (index <= 0 || index >= size) {
-      throw new IndexOutOfBoundsException("Invalid position");
-    }
-    for (int i = 1; i < index; i++) {
-      current = current.getNext();
-    }
-    newNode.setNext(current.getNext());
-    newNode.setPrevious(current);
-    current.getNext().setPrevious(newNode);
-    current.setNext(newNode);
-    this.size++;
-  }
-
-  public boolean remove() {
-    if (head == null) {
-      return false;
-    }
-    if (head == tail || size == 1) {
-      head = null;
-      tail = null;
+  @Override
+  public Node<T> removeFirst() {
+    validateEmpty();
+    Node<T> removedNode = head;
+    if (head == tail) {
+      clearCircularDoublyLinkedList();
     } else {
-      tail = tail.getPrevious();
-      tail.setNext(head);
-      head.setPrevious(tail);
-    }
-    this.size--;
-    return true;
-  }
-
-  public T removeLast() {
-    T data;
-    if (head == null) {
-      throw new NoSuchElementException("Linked list has no elements.");
-    }
-    if (head == tail || size == 1) {
-      data = tail.getData();
-      head = null;
-      tail = null;
-    } else {
-      data = tail.getData();
-      tail = tail.getPrevious();
-      tail.setNext(head);
-      head.setPrevious(tail);
-    }
-    this.size--;
-    return data;
-  }
-
-  public T removeHead() {
-    T data;
-    if (head == null || size == 0) {
-      throw new NoSuchElementException("Linked list has no elements.");
-    }
-    if (head == tail || size == 1) {
-      data = tail.getData();
-      head = null;
-      tail = null;
-    } else {
-      data = head.getData();
       head = head.getNext();
+      clearNodeReferences(removedNode);
       head.setPrevious(tail);
       tail.setNext(head);
     }
-    this.size--;
-    return data;
+    decrementSize();
+    return removedNode;
   }
 
-  public T remove(int index) {
-    Node<T> current = head;
-    if (index <= 0 || index >= size) {
-      throw new IndexOutOfBoundsException("Invalid position");
+  @Override
+  public Node<T> removeIndex(int index) {
+    validateEmpty();
+    if (index < 0 || index >= size) {
+      throw new IndexOutOfBoundsException("Index " + index + " out of bounds for size " + size);
     }
-    for (int i = 1; i < index; i++) {
+    if (index == 0)
+      return removeFirst();
+    if (index == size - 1)
+      return removeLast();
+    Node<T> current = getNodeAt(index);
+    Node<T> previousNode = current.getPrevious();
+    Node<T> nextNode = current.getNext();
+    previousNode.setNext(nextNode);
+    nextNode.setPrevious(previousNode);
+    clearNodeReferences(current);
+    decrementSize();
+    return current;
+  }
+
+  @Override
+  public Node<T> getNodeAt(int index) {
+    Node<T> current = head;
+    int currentIndex = 0;
+    while (current != null && currentIndex < index) {
       current = current.getNext();
+      currentIndex++;
     }
-    T data = current.getNext().getData();
-    current.getNext().getNext().setPrevious(current);
-    current.setNext(current.getNext().getNext());
-    this.size--;
-    return data;
+    return current;
   }
 
-  public void display() {
-    Node<T> current = head;
-    try {
-      do {
-        System.out.println(current.getData());
-        current = current.getNext();
-      } while (current != head);
-    } catch (NullPointerException e) {
-      throw new NoSuchElementException("Linked list has no elements");
+  public void validateEmpty() {
+    if (isEmpty()) {
+      throw new IndexOutOfBoundsException("Circular doubly linked list is empty.");
     }
+  }
+
+  private void clearCircularDoublyLinkedList() {
+    super.head = null;
+    super.tail = null;
+    setSize(0);
+  }
+
+  private void clearNodeReferences(Node<T> node) {
+    if (node != null) {
+      node.setNext(null);
+      node.setPrevious(null);
+    }
+  }
+
+  @Override
+  public String display() {
+    Node<T> current = super.head;
+    StringBuilder stringBuilder = new StringBuilder();
+    do {
+      stringBuilder.append(current.getData())
+          .append(" -> ");
+      current = current.getNext();
+    } while (current != super.head);
+    return stringBuilder.append("(head)").toString();
   }
 }
