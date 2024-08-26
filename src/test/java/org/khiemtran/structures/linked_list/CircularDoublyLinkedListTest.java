@@ -2,227 +2,111 @@ package org.khiemtran.structures.linked_list;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import java.util.*;
+import org.khiemtran.structures.linked_list.model.CircularDoublyLinkedList;
+import org.khiemtran.structures.linked_list.model.Node;
 
 class CircularDoublyLinkedListTest {
-  private final CircularDoublyLinkedList<Object> linkedList = new CircularDoublyLinkedList<>();
-
   @Test
-  public void displayNullPointerException() {
-    Assertions.assertThrows(NoSuchElementException.class, linkedList::display, "Linked list has no elements");
+  public void addLast() {
+    CircularDoublyLinkedList<Integer> circularDoublyLinkedList = new CircularDoublyLinkedList<>();
+    StringBuilder stringBuilder = new StringBuilder();
+    for (int i = 1; i < 6; i++) {
+      circularDoublyLinkedList.addLast(i);
+      stringBuilder.append(i).append(" -> ");
+    }
+    Assertions.assertEquals(stringBuilder.append("(head)").toString(), circularDoublyLinkedList.display());
+    Assertions.assertEquals(5, circularDoublyLinkedList.getSize());
+    Assertions.assertEquals(1, circularDoublyLinkedList.getHead().getData());
   }
 
   @Test
-  public void checkAddOnlyElement() {
-    Assertions.assertTrue(linkedList.add(1));
-    Assertions.assertEquals(1, linkedList.getSize());
+  public void removeLast() {
+    CircularDoublyLinkedList<Integer> circularDoublyLinkedList = new CircularDoublyLinkedList<>();
+    for (int i = 1; i < 6; i++) {
+      circularDoublyLinkedList.addLast(i);
+    }
+    for (int i = 5; i > 2; i--) {
+      Assertions.assertEquals(i, circularDoublyLinkedList.removeLast().getData());
+    }
+    Assertions.assertEquals("1 -> 2 -> (head)", circularDoublyLinkedList.display());
+    Assertions.assertEquals(2, circularDoublyLinkedList.getSize());
+    Assertions.assertEquals(1, circularDoublyLinkedList.getTail().getNext().getData());
+    Assertions.assertEquals(2, circularDoublyLinkedList.removeLast().getData());
+    Assertions.assertEquals(1, circularDoublyLinkedList.getHead().getNext().getData());
+    Assertions.assertEquals(1, circularDoublyLinkedList.removeLast().getData());
+    IndexOutOfBoundsException indexOutOfBoundsException = Assertions.assertThrows(IndexOutOfBoundsException.class,
+        circularDoublyLinkedList::removeLast);
+    Assertions.assertEquals("Circular doubly linked list is empty.", indexOutOfBoundsException.getMessage());
   }
 
   @Test
-  public void checkAddElements() {
-    Assertions.assertTrue(linkedList.add(1));
-    Assertions.assertTrue(linkedList.add("test"));
-    Assertions.assertTrue(linkedList.add('t'));
-    Assertions.assertTrue(linkedList.add(Arrays.asList(1, 2, 3)));
-    Map<Integer, String> map = new HashMap<>();
-    map.put(1, "1");
-    map.put(2, "2");
-    map.put(3, "3");
-    Assertions.assertTrue(linkedList.add(map));
-    Assertions.assertEquals(5, linkedList.getSize());
+  public void insert() {
+    CircularDoublyLinkedList<Integer> circularDoublyLinkedList = new CircularDoublyLinkedList<>();
+    IndexOutOfBoundsException indexOutOfBoundsException = Assertions.assertThrows(IndexOutOfBoundsException.class,
+        () -> circularDoublyLinkedList.insert(1, -1));
+    Assertions.assertEquals("Index " + -1 + " out of bounds for size " + circularDoublyLinkedList.getSize(), indexOutOfBoundsException.getMessage());
+    IndexOutOfBoundsException indexOutOfBoundsException1 = Assertions.assertThrows(IndexOutOfBoundsException.class,
+        () -> circularDoublyLinkedList.insert(1, 10));
+    Assertions.assertEquals("Index " + 10 + " out of bounds for size " + circularDoublyLinkedList.getSize(), indexOutOfBoundsException1.getMessage());
+    circularDoublyLinkedList.insert(1, 0);
+    circularDoublyLinkedList.addLast(2);
+    circularDoublyLinkedList.insert(5, circularDoublyLinkedList.getSize());
+    Assertions.assertEquals("1 -> 2 -> 5 -> (head)", circularDoublyLinkedList.display());
+    Assertions.assertEquals(1, circularDoublyLinkedList.getTail().getNext().getData());
+    Assertions.assertEquals(5, circularDoublyLinkedList.getHead().getPrevious().getData());
+    circularDoublyLinkedList.insert(3, 2);
+    circularDoublyLinkedList.insert(4, 3);
+    Assertions.assertEquals("1 -> 2 -> 3 -> 4 -> 5 -> (head)", circularDoublyLinkedList.display());
+    Assertions.assertEquals(5, circularDoublyLinkedList.getSize());
   }
 
   @Test
-  public void addOnlyElement() {
-    Assertions.assertEquals(0, linkedList.getSize());
-    Assertions.assertNull(linkedList.getHead());
-    Assertions.assertNull(linkedList.getTail());
-    linkedList.addLast(1);
-    Assertions.assertEquals(1, linkedList.getHead().getData());
-    Assertions.assertEquals(1, linkedList.getSize());
+  public void removeFirst() {
+    CircularDoublyLinkedList<Integer> circularDoublyLinkedList = new CircularDoublyLinkedList<>();
+    for (int i = 1; i < 6; i++) {
+      circularDoublyLinkedList.addLast(i);
+    }
+    for (int i = 1; i < 5; i++) {
+      Assertions.assertEquals(i, circularDoublyLinkedList.removeFirst().getData());
+    }
+    Assertions.assertEquals("5 -> (head)", circularDoublyLinkedList.display());
+    Assertions.assertEquals(5, circularDoublyLinkedList.removeFirst().getData());
+    IndexOutOfBoundsException indexOutOfBoundsException = Assertions.assertThrows(IndexOutOfBoundsException.class,
+        circularDoublyLinkedList::removeFirst);
+    Assertions.assertEquals("Circular doubly linked list is empty.", indexOutOfBoundsException.getMessage());
   }
 
   @Test
-  public void addLastOnlyElement() {
-    Assertions.assertEquals(0, linkedList.getSize());
-    Assertions.assertNull(linkedList.getHead());
-    Assertions.assertNull(linkedList.getTail());
-    linkedList.addFirst(1);
-    Assertions.assertEquals(1, linkedList.getHead().getData());
-    Assertions.assertEquals(1, linkedList.getSize());
-  }
-
-  @Test
-  public void addElements() {
-    linkedList.addLast(1);
-    linkedList.addLast("test");
-    linkedList.addLast('t');
-    List<Integer> numbers = Arrays.asList(1, 2, 3);
-    linkedList.addLast(numbers);
-    Map<Integer, String> map = new HashMap<>();
-    map.put(1, "1");
-    map.put(2, "2");
-    map.put(3, "3");
-    linkedList.addLast(map);
-    Assertions.assertEquals(5, linkedList.getSize());
-    Assertions.assertEquals(1, linkedList.getHead().getData());
-    Assertions.assertEquals(map, linkedList.getTail().getData());
-    Assertions.assertEquals(numbers, linkedList.getTail().getPrevious().getData());
-    Assertions.assertEquals("test", linkedList.getHead().getNext().getData());
-    Assertions.assertEquals('t', linkedList.getTail().getPrevious().getPrevious().getData());
-    linkedList.display();
-  }
-
-  @Test
-  public void addFirstElements() {
-    linkedList.addFirst(5);
-    linkedList.addFirst(4);
-    linkedList.addFirst(3);
-    linkedList.addFirst(2);
-    linkedList.addFirst(1);
-    Assertions.assertEquals(1, linkedList.getHead().getData());
-    Assertions.assertEquals(2, linkedList.getHead().getNext().getData());
-    Assertions.assertEquals(5, linkedList.getTail().getData());
-    Assertions.assertEquals(4, linkedList.getTail().getPrevious().getData());
-    Assertions.assertEquals(5, linkedList.getSize());
-    linkedList.display();
-  }
-
-  @Test
-  public void insertIndexOUtOfBoundException() {
-    Assertions.assertThrows(IndexOutOfBoundsException.class, () -> linkedList.add(0, 1), "Invalid position");
-    Assertions.assertThrows(IndexOutOfBoundsException.class, () -> linkedList.add(-1, 1), "Invalid position");
-    Assertions.assertThrows(IndexOutOfBoundsException.class, () -> linkedList.add(1, 1), "Invalid position");
-  }
-
-  @Test
-  public void insertElement() {
-    linkedList.addFirst(1);
-    linkedList.addLast(5);
-    linkedList.add(1, 2);
-    linkedList.add(2, 3);
-    linkedList.add(3, 4);
-    linkedList.display();
-    Assertions.assertEquals(1, linkedList.getHead().getData());
-    Assertions.assertEquals(5, linkedList.getTail().getData());
-    Assertions.assertEquals(2, linkedList.getHead().getNext().getData());
-    Assertions.assertEquals(4, linkedList.getTail().getPrevious().getData());
-    Assertions.assertEquals(5, linkedList.getSize());
-  }
-
-  @Test
-  public void checkRemoveWhenLinkedListEmpty() {
-    Assertions.assertFalse(linkedList.remove());
-  }
-
-  @Test
-  public void checkRemoveOnlyElement() {
-    linkedList.add(1);
-    Assertions.assertTrue(linkedList.remove());
-    Assertions.assertFalse(linkedList.remove());
-    Assertions.assertNull(linkedList.getHead());
-    Assertions.assertNull(linkedList.getTail());
-  }
-
-  @Test
-  public void checkRemoveElements() {
-    linkedList.add(1);
-    linkedList.add(2);
-    linkedList.add(3);
-    Assertions.assertTrue(linkedList.remove());
-    Assertions.assertTrue(linkedList.remove());
-    Assertions.assertEquals(1, linkedList.getHead().getData());
-    Assertions.assertEquals(1, linkedList.getTail().getData());
-    Assertions.assertEquals(1, linkedList.getSize());
-  }
-
-  @Test
-  public void removeLastElementWhenLinkedListEmpty() {
-    Assertions.assertThrows(NoSuchElementException.class, linkedList::removeLast, "Linked list empty.");
-  }
-
-  @Test
-  public void removeLastOnlyElement() {
-    linkedList.addLast(1);
-    Assertions.assertEquals(1, linkedList.getHead().getData());
-    Assertions.assertEquals(1, linkedList.getTail().getData());
-    Assertions.assertEquals(1, linkedList.removeLast());
-    Assertions.assertEquals(0, linkedList.getSize());
-    Assertions.assertNull(linkedList.getHead());
-    Assertions.assertNull(linkedList.getTail());
-  }
-
-  @Test
-  public void removeLastElements() {
-    linkedList.addLast(1);
-    linkedList.addLast("test");
-    linkedList.addLast('t');
-    List<Integer> numbers = Arrays.asList(1, 2, 3);
-    linkedList.addLast(numbers);
-    Map<Integer, String> map = new HashMap<>();
-    map.put(1, "1");
-    map.put(2, "2");
-    map.put(3, "3");
-    linkedList.addLast(map);
-    Assertions.assertEquals(map, linkedList.removeLast());
-    Assertions.assertEquals(numbers, linkedList.getTail().getData());
-    Assertions.assertEquals(1, linkedList.getHead().getData());
-    Assertions.assertEquals(4, linkedList.getSize());
-    Assertions.assertEquals(numbers, linkedList.removeLast());
-    Assertions.assertEquals('t', linkedList.removeLast());
-  }
-
-  @Test
-  public void removeFirstWhenLinkedListEmpty() {
-    Assertions.assertThrows(NoSuchElementException.class, linkedList::removeHead, "Linked List is empty.");
-  }
-
-  @Test
-  public void removeFirstOnlyElement() {
-    linkedList.addLast(1);
-    Assertions.assertEquals(1, linkedList.getSize());
-    Assertions.assertEquals(1, linkedList.removeHead());
-    Assertions.assertEquals(0, linkedList.getSize());
-  }
-
-  @Test
-  public void removeFirstElements() {
-    linkedList.addLast(1);
-    linkedList.addLast(2);
-    linkedList.addLast(3);
-    Assertions.assertEquals(3, linkedList.getSize());
-    Assertions.assertEquals(1, linkedList.removeHead());
-    Assertions.assertEquals(2, linkedList.getHead().getData());
-    Assertions.assertEquals(3, linkedList.getHead().getNext().getData());
-    Assertions.assertEquals(3, linkedList.getTail().getData());
-    Assertions.assertEquals(2, linkedList.getTail().getPrevious().getData());
-    Assertions.assertEquals(2, linkedList.getSize());
-    Assertions.assertEquals(2, linkedList.removeHead());
-    Assertions.assertEquals(3, linkedList.getHead().getData());
-    Assertions.assertEquals(3, linkedList.getTail().getData());
-    Assertions.assertEquals(1, linkedList.getSize());
-  }
-
-  @Test
-  public void removeIndexOutOfBound() {
-    Assertions.assertThrows(IndexOutOfBoundsException.class, () -> linkedList.remove(-1), "Invalid position");
-    Assertions.assertThrows(IndexOutOfBoundsException.class, () -> linkedList.remove(0), "Invalid position");
-    Assertions.assertThrows(IndexOutOfBoundsException.class, () -> linkedList.remove(1), "Invalid position");
-  }
-
-  @Test
-  public void removeIndexElements() {
-    linkedList.add(1);
-    linkedList.add(2);
-    linkedList.add(3);
-    linkedList.add(4);
-    linkedList.add(5);
-    Assertions.assertEquals(2, linkedList.remove(1));
-    Assertions.assertEquals(4, linkedList.remove(2));
-    Assertions.assertEquals(3, linkedList.remove(1));
-    Assertions.assertEquals(5, linkedList.getHead().getNext().getData());
-    Assertions.assertEquals(1, linkedList.getTail().getPrevious().getData());
-    Assertions.assertEquals(2, linkedList.getSize());
+  public void removeIndex() {
+    CircularDoublyLinkedList<Integer> circularDoublyLinkedList = new CircularDoublyLinkedList<>();
+    IndexOutOfBoundsException indexOutOfBoundsException = Assertions.assertThrows(IndexOutOfBoundsException.class,
+        () -> circularDoublyLinkedList.removeIndex(1));
+    Assertions.assertEquals("Circular doubly linked list is empty.", indexOutOfBoundsException.getMessage());
+    for (int i = 1; i < 6; i++) {
+      circularDoublyLinkedList.addLast(i);
+    }
+    IndexOutOfBoundsException indexOutOfBoundsException1 = Assertions.assertThrows(IndexOutOfBoundsException.class,
+        () -> circularDoublyLinkedList.removeIndex(-1));
+    Assertions.assertEquals("Index " + -1 + " out of bounds for size " + circularDoublyLinkedList.getSize()
+        , indexOutOfBoundsException1.getMessage());
+    IndexOutOfBoundsException indexOutOfBoundsException2 = Assertions.assertThrows(IndexOutOfBoundsException.class, () ->
+        circularDoublyLinkedList.removeIndex(10));
+    Assertions.assertEquals("Index " + 10 + " out of bounds for size " + circularDoublyLinkedList.getSize(),
+        indexOutOfBoundsException2.getMessage());
+    Assertions.assertEquals("1 -> 2 -> 3 -> 4 -> 5 -> (head)", circularDoublyLinkedList.display());
+    Assertions.assertEquals(1, circularDoublyLinkedList.removeIndex(0).getData());
+    Assertions.assertEquals(2, circularDoublyLinkedList.getTail().getNext().getData());
+    Assertions.assertEquals(5, circularDoublyLinkedList.removeIndex(circularDoublyLinkedList.getSize() - 1).getData());
+    Assertions.assertEquals("2 -> 3 -> 4 -> (head)", circularDoublyLinkedList.display());
+    Assertions.assertEquals(2, circularDoublyLinkedList.getTail().getNext().getData());
+    Assertions.assertEquals(4, circularDoublyLinkedList.getHead().getPrevious().getData());
+    circularDoublyLinkedList.addFirst(1);
+    circularDoublyLinkedList.addLast(5);
+    Assertions.assertEquals("1 -> 2 -> 3 -> 4 -> 5 -> (head)", circularDoublyLinkedList.display());
+    Node<Integer> integerNode = circularDoublyLinkedList.removeIndex(2);
+    Assertions.assertEquals(3, integerNode.getData());
+    Assertions.assertEquals("1 -> 2 -> 4 -> 5 -> (head)", circularDoublyLinkedList.display());
+    Assertions.assertEquals(1, circularDoublyLinkedList.getTail().getNext().getData());
+    Assertions.assertEquals(5, circularDoublyLinkedList.getHead().getPrevious().getData());
   }
 }

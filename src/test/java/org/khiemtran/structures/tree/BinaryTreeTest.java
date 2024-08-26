@@ -3,17 +3,19 @@ package org.khiemtran.structures.tree;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.khiemtran.structures.tree.service.impl.BinaryTreeTraversalImpl;
-import org.khiemtran.structures.tree.service.impl.TreeMetricsImpl;
 import org.khiemtran.structures.tree.service.TraversalTree;
 import org.khiemtran.structures.tree.service.TreeMetrics;
+import org.khiemtran.structures.tree.service.impl.BinaryTreeTraversalImpl;
+import org.khiemtran.structures.tree.service.impl.TreeMetricsImpl;
 
 class BinaryTreeTest {
   private TraversalTree<Integer> traversalTree;
+  private TreeMetrics<Integer> metrics;
 
   @BeforeEach
   public void setUp() {
     this.traversalTree = new BinaryTreeTraversalImpl<>();
+    this.metrics = new TreeMetricsImpl<>();
   }
 
   @Test
@@ -39,8 +41,7 @@ class BinaryTreeTest {
     root.getLeft().setRight(new Node<>(4));
     root.getRight().setLeft(new Node<>(5));
     BinaryTree<Integer> binaryTree = new BinaryTree<>(root);
-    TreeMetrics<Integer> treePropertiesChecker = new TreeMetricsImpl<>();
-    Assertions.assertFalse(treePropertiesChecker.isFullBinaryTree(binaryTree.getRoot()));
+    Assertions.assertFalse(metrics.isFullBinaryTree(binaryTree.getRoot()));
   }
 
   @Test
@@ -53,9 +54,7 @@ class BinaryTreeTest {
     root.getRight().setLeft(new Node<>(5));
     root.getRight().setRight(new Node<>(6));
     BinaryTree<Integer> binaryTree = new BinaryTree<>(root);
-    BinaryTreeTraversalImpl<Integer> treeTraversal = new BinaryTreeTraversalImpl<>();
-    TreeMetrics<Integer> treePropertiesChecker = new TreeMetricsImpl<>();
-    Assertions.assertTrue(treePropertiesChecker.isFullBinaryTree(binaryTree.getRoot()));
+    Assertions.assertTrue(metrics.isFullBinaryTree(binaryTree.getRoot()));
   }
 
   @Test
@@ -81,9 +80,8 @@ class BinaryTreeTest {
     root.getRight().setLeft(new Node<>(5));
     root.getRight().setRight(new Node<>(6));
     BinaryTree<Integer> binaryTree = new BinaryTree<>(root);
-    TreeMetrics<Integer> treeMetrics = new TreeMetricsImpl<>();
-    boolean fullBinaryTree = treeMetrics.isFullBinaryTree(binaryTree.getRoot());
-    boolean perfectBinaryTree = treeMetrics.isPerfectBinaryTree(binaryTree.getRoot());
+    boolean fullBinaryTree = metrics.isFullBinaryTree(binaryTree.getRoot());
+    boolean perfectBinaryTree = metrics.isPerfectBinaryTree(binaryTree.getRoot());
     Assertions.assertTrue(fullBinaryTree);
     Assertions.assertTrue(perfectBinaryTree);
   }
@@ -97,8 +95,7 @@ class BinaryTreeTest {
     root.getLeft().setRight(new Node<>(4));
     root.getRight().setRight(new Node<>(5));
     BinaryTree<Integer> binaryTree = new BinaryTree<>(root);
-    TreeMetrics<Integer> treeMetrics = new TreeMetricsImpl<>();
-    boolean completeBinaryTree = treeMetrics.isCompleteBinaryTree(binaryTree.getRoot());
+    boolean completeBinaryTree = metrics.isCompleteBinaryTree(binaryTree.getRoot());
     Assertions.assertFalse(completeBinaryTree);
   }
 
@@ -110,9 +107,8 @@ class BinaryTreeTest {
     root.getRight().setLeft(new Node<>(6));
     root.getRight().setRight(new Node<>(4));
     BinaryTree<Integer> binaryTree = new BinaryTree<>(root);
-    TreeMetrics<Integer> treeMetrics = new TreeMetricsImpl<>();
-    boolean fullBinaryTree = treeMetrics.isFullBinaryTree(binaryTree.getRoot());
-    boolean completeBinaryTree = treeMetrics.isCompleteBinaryTree(binaryTree.getRoot());
+    boolean fullBinaryTree = metrics.isFullBinaryTree(binaryTree.getRoot());
+    boolean completeBinaryTree = metrics.isCompleteBinaryTree(binaryTree.getRoot());
     Assertions.assertTrue(fullBinaryTree);
     Assertions.assertFalse(completeBinaryTree);
   }
@@ -124,10 +120,34 @@ class BinaryTreeTest {
     root.getLeft().setLeft(new Node<>(6));
     root.setRight(new Node<>(3));
     BinaryTree<Integer> binaryTree = new BinaryTree<>(root);
-    TreeMetrics<Integer> treeMetrics = new TreeMetricsImpl<>();
-    boolean fullBinaryTree = treeMetrics.isFullBinaryTree(binaryTree.getRoot());
-    boolean completeBinaryTree = treeMetrics.isCompleteBinaryTree(binaryTree.getRoot());
+    boolean fullBinaryTree = metrics.isFullBinaryTree(binaryTree.getRoot());
+    boolean completeBinaryTree = metrics.isCompleteBinaryTree(binaryTree.getRoot());
     Assertions.assertFalse(fullBinaryTree);
     Assertions.assertTrue(completeBinaryTree);
+  }
+
+  @Test
+  public void isNotBalancedBinaryTree() {
+    Node<Integer> root = new Node<>(1);
+    root.setLeft(new Node<>(2));
+    root.setRight(new Node<>(3));
+    root.getLeft().setLeft(new Node<>(4));
+    root.getLeft().setRight(new Node<>(5));
+    root.getLeft().getRight().setRight(new Node<>(6));
+    BinaryTree<Integer> binaryTree = new BinaryTree<>(root);
+    boolean balancedBinaryTree = metrics.isBalancedBinaryTree(binaryTree.getRoot());
+    Assertions.assertFalse(balancedBinaryTree);
+  }
+
+  @Test
+  public void isBalancedBinaryTree() {
+    Node<Integer> root = new Node<>(1);
+    root.setLeft(new Node<>(2));
+    root.setRight(new Node<>(3));
+    root.getLeft().setLeft(new Node<>(4));
+    root.getLeft().setRight(new Node<>(5));
+    BinaryTree<Integer> binaryTree = new BinaryTree<>(root);
+    boolean balancedBinaryTree = metrics.isBalancedBinaryTree(binaryTree.getRoot());
+    Assertions.assertTrue(balancedBinaryTree);
   }
 }
