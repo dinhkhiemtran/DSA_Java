@@ -1,14 +1,13 @@
-package org.khiemtran.structures.linked_list;
+package org.khiemtran.structures.linked_list.model;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.khiemtran.structures.linked_list.model.CircularDoublyLinkedList;
-import org.khiemtran.structures.linked_list.model.Node;
+import org.khiemtran.structures.linked_list.AbstractLinkedList;
 
 class CircularDoublyLinkedListTest {
   @Test
   public void addLast() {
-    CircularDoublyLinkedList<Integer> circularDoublyLinkedList = new CircularDoublyLinkedList<>();
+    AbstractLinkedList<Integer> circularDoublyLinkedList = new CircularDoublyLinkedList<>();
     StringBuilder stringBuilder = new StringBuilder();
     for (int i = 1; i < 6; i++) {
       circularDoublyLinkedList.addLast(i);
@@ -16,12 +15,13 @@ class CircularDoublyLinkedListTest {
     }
     Assertions.assertEquals(stringBuilder.append("(head)").toString(), circularDoublyLinkedList.display());
     Assertions.assertEquals(5, circularDoublyLinkedList.getSize());
+    Assertions.assertEquals(5, circularDoublyLinkedList.getNodeAt(circularDoublyLinkedList.getSize() - 1).getData());
     Assertions.assertEquals(1, circularDoublyLinkedList.getHead().getData());
   }
 
   @Test
   public void removeLast() {
-    CircularDoublyLinkedList<Integer> circularDoublyLinkedList = new CircularDoublyLinkedList<>();
+    AbstractLinkedList<Integer> circularDoublyLinkedList = new CircularDoublyLinkedList<>();
     for (int i = 1; i < 6; i++) {
       circularDoublyLinkedList.addLast(i);
     }
@@ -41,7 +41,7 @@ class CircularDoublyLinkedListTest {
 
   @Test
   public void insert() {
-    CircularDoublyLinkedList<Integer> circularDoublyLinkedList = new CircularDoublyLinkedList<>();
+    AbstractLinkedList<Integer> circularDoublyLinkedList = new CircularDoublyLinkedList<>();
     IndexOutOfBoundsException indexOutOfBoundsException = Assertions.assertThrows(IndexOutOfBoundsException.class,
         () -> circularDoublyLinkedList.insert(1, -1));
     Assertions.assertEquals("Index " + -1 + " out of bounds for size " + circularDoublyLinkedList.getSize(), indexOutOfBoundsException.getMessage());
@@ -62,7 +62,7 @@ class CircularDoublyLinkedListTest {
 
   @Test
   public void removeFirst() {
-    CircularDoublyLinkedList<Integer> circularDoublyLinkedList = new CircularDoublyLinkedList<>();
+    AbstractLinkedList<Integer> circularDoublyLinkedList = new CircularDoublyLinkedList<>();
     for (int i = 1; i < 6; i++) {
       circularDoublyLinkedList.addLast(i);
     }
@@ -78,7 +78,7 @@ class CircularDoublyLinkedListTest {
 
   @Test
   public void removeIndex() {
-    CircularDoublyLinkedList<Integer> circularDoublyLinkedList = new CircularDoublyLinkedList<>();
+    AbstractLinkedList<Integer> circularDoublyLinkedList = new CircularDoublyLinkedList<>();
     IndexOutOfBoundsException indexOutOfBoundsException = Assertions.assertThrows(IndexOutOfBoundsException.class,
         () -> circularDoublyLinkedList.removeIndex(1));
     Assertions.assertEquals("Circular doubly linked list is empty.", indexOutOfBoundsException.getMessage());

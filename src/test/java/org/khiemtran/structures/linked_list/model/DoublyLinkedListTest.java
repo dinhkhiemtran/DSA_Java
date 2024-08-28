@@ -2,26 +2,27 @@ package org.khiemtran.structures.linked_list.model;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.khiemtran.structures.linked_list.AbstractLinkedList;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class DoublyLinkedListTest {
   @Test
   void addLast() {
-    DoublyLinkedList<Integer> doublyLinkedList = new DoublyLinkedList<>();
-    doublyLinkedList.addLast(1);
-    doublyLinkedList.addLast(2);
-    doublyLinkedList.addLast(3);
+    AbstractLinkedList<Integer> doublyLinkedList = new DoublyLinkedList<>();
+    for (int i = 1; i < 4; i++) {
+      doublyLinkedList.addLast(i);
+    }
     Assertions.assertEquals(1, doublyLinkedList.getHead().getData());
     Assertions.assertEquals(3, doublyLinkedList.getTail().getData());
   }
 
   @Test
   void removeLast() {
-    DoublyLinkedList<Integer> doublyLinkedList = new DoublyLinkedList<>();
-    doublyLinkedList.addLast(1);
-    doublyLinkedList.addLast(2);
-    doublyLinkedList.addLast(3);
+    AbstractLinkedList<Integer> doublyLinkedList = new DoublyLinkedList<>();
+    for (int i = 1; i < 4; i++) {
+      doublyLinkedList.addLast(i);
+    }
     Assertions.assertEquals(3, doublyLinkedList.removeLast().getData());
     Assertions.assertEquals(2, doublyLinkedList.removeLast().getData());
     Assertions.assertEquals(1, doublyLinkedList.getSize());
@@ -33,7 +34,7 @@ class DoublyLinkedListTest {
 
   @Test
   void insert() {
-    DoublyLinkedList<Integer> doublyLinkedList = new DoublyLinkedList<>();
+    AbstractLinkedList<Integer> doublyLinkedList = new DoublyLinkedList<>();
     IndexOutOfBoundsException indexOutOfBoundsException = assertThrows(IndexOutOfBoundsException.class,
         () -> doublyLinkedList.insert(1, -1));
     Assertions.assertEquals("Index " + -1 + " out of bounds for size " + doublyLinkedList.getSize(),
@@ -54,21 +55,19 @@ class DoublyLinkedListTest {
 
   @Test
   void addFirst() {
-    DoublyLinkedList<Integer> doublyLinkedList = new DoublyLinkedList<>();
-    doublyLinkedList.addFirst(5);
-    doublyLinkedList.addFirst(4);
-    doublyLinkedList.addFirst(3);
-    doublyLinkedList.addFirst(2);
-    doublyLinkedList.addFirst(1);
+    AbstractLinkedList<Integer> doublyLinkedList = new DoublyLinkedList<>();
+    for (int i = 5; i > 0; i--) {
+      doublyLinkedList.addFirst(i);
+    }
     Assertions.assertEquals(1, doublyLinkedList.getHead().getData());
   }
 
   @Test
   void removeFirst() {
-    DoublyLinkedList<Integer> doublyLinkedList = new DoublyLinkedList<>();
-    doublyLinkedList.addLast(1);
-    doublyLinkedList.addLast(2);
-    doublyLinkedList.addLast(3);
+    AbstractLinkedList<Integer> doublyLinkedList = new DoublyLinkedList<>();
+    for (int i = 1; i < 4; i++) {
+      doublyLinkedList.addLast(i);
+    }
     doublyLinkedList.addLast(4);
     Assertions.assertEquals(1, doublyLinkedList.removeFirst().getData());
     Assertions.assertEquals(2, doublyLinkedList.removeFirst().getData());
@@ -81,7 +80,7 @@ class DoublyLinkedListTest {
 
   @Test
   void removeIndex() {
-    DoublyLinkedList<Integer> doublyLinkedList = new DoublyLinkedList<>();
+    AbstractLinkedList<Integer> doublyLinkedList = new DoublyLinkedList<>();
     IndexOutOfBoundsException indexOutOfBoundsException = assertThrows(IndexOutOfBoundsException.class,
         () -> doublyLinkedList.removeIndex(0));
     Assertions.assertEquals("Doubly linked list is empty.", indexOutOfBoundsException.getMessage());
@@ -106,12 +105,10 @@ class DoublyLinkedListTest {
 
   @Test
   void getNodeAt() {
-    DoublyLinkedList<Integer> linkedList = new DoublyLinkedList<>();
-    linkedList.addLast(1);
-    linkedList.addLast(2);
-    linkedList.addLast(3);
-    linkedList.addLast(4);
-    linkedList.addLast(5);
+    AbstractLinkedList<Integer> linkedList = new DoublyLinkedList<>();
+    for (int i = 1; i < 6; i++) {
+      linkedList.addLast(i);
+    }
     Assertions.assertEquals(1, linkedList.getNodeAt(0).getData());
     Assertions.assertEquals(2, linkedList.getNodeAt(1).getData());
     Assertions.assertEquals(5, linkedList.getNodeAt(linkedList.getSize() - 1).getData());

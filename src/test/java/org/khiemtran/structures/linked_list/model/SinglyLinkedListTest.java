@@ -2,25 +2,26 @@ package org.khiemtran.structures.linked_list.model;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.khiemtran.structures.linked_list.AbstractLinkedList;
 import org.khiemtran.structures.linked_list.model.Node;
 import org.khiemtran.structures.linked_list.model.SinglyLinkedList;
 
 class SinglyLinkedListTest {
   @Test
   public void addElement() {
-    SinglyLinkedList<Integer> singlyLinkedList = new SinglyLinkedList<>();
-    singlyLinkedList.addLast(1);
-    singlyLinkedList.addLast(2);
-    singlyLinkedList.addLast(3);
+    AbstractLinkedList<Integer> singlyLinkedList = new SinglyLinkedList<>();
+    for (int i = 1; i < 4; i++) {
+      singlyLinkedList.addLast(i);
+    }
     Assertions.assertEquals(3, singlyLinkedList.getSize());
     Assertions.assertEquals(1, singlyLinkedList.getHead().getData());
     Assertions.assertEquals(2, singlyLinkedList.getHead().getNext().getData());
-    Assertions.assertEquals(3, singlyLinkedList.getHead().getNext().getNext().getData());
+    Assertions.assertEquals(3, singlyLinkedList.getNodeAt(singlyLinkedList.getSize() -1).getData());
   }
 
   @Test
   public void removeElement() {
-    SinglyLinkedList<Object> singlyLinkedList = new SinglyLinkedList<>();
+    AbstractLinkedList<Object> singlyLinkedList = new SinglyLinkedList<>();
     singlyLinkedList.addLast(1);
     Node<Object> removedNode = singlyLinkedList.removeLast();
     Assertions.assertEquals(1, removedNode.getData());
@@ -42,15 +43,15 @@ class SinglyLinkedListTest {
 
   @Test
   public void removeWhenLinkedListEmpty() {
-    SinglyLinkedList<Object> singlyLinkedList = new SinglyLinkedList<>();
+    AbstractLinkedList<Object> singlyLinkedList = new SinglyLinkedList<>();
     IndexOutOfBoundsException indexOutOfBoundsException = Assertions.assertThrows(IndexOutOfBoundsException.class,
-        () -> singlyLinkedList.removeLast());
+        singlyLinkedList::removeLast);
     Assertions.assertEquals("Linked list is empty.", indexOutOfBoundsException.getMessage());
   }
 
   @Test
   public void insert() {
-    SinglyLinkedList<Object> singlyLinkedList = new SinglyLinkedList<>();
+    AbstractLinkedList<Object> singlyLinkedList = new SinglyLinkedList<>();
     IndexOutOfBoundsException indexOutOfBoundsException = Assertions.assertThrows(IndexOutOfBoundsException.class,
         () -> singlyLinkedList.insert(1, -1));
     Assertions.assertEquals("Index -1 is out of bounds. Size: 0", indexOutOfBoundsException.getMessage());
@@ -84,7 +85,7 @@ class SinglyLinkedListTest {
 
   @Test
   public void addFirst() {
-    SinglyLinkedList<Object> singlyLinkedList = new SinglyLinkedList<>();
+    AbstractLinkedList<Object> singlyLinkedList = new SinglyLinkedList<>();
     singlyLinkedList.addLast(1);
     singlyLinkedList.addLast(2);
     Assertions.assertEquals(2, singlyLinkedList.getSize());
@@ -96,7 +97,7 @@ class SinglyLinkedListTest {
 
   @Test
   public void addFirstWhenLinkedListNull() {
-    SinglyLinkedList<Object> singlyLinkedList = new SinglyLinkedList<>();
+    AbstractLinkedList<Object> singlyLinkedList = new SinglyLinkedList<>();
     singlyLinkedList.addFirst(1);
     Assertions.assertEquals(1, singlyLinkedList.getHead().getData());
     singlyLinkedList.addLast(2);
@@ -106,11 +107,10 @@ class SinglyLinkedListTest {
 
   @Test
   public void removeFirst() {
-    SinglyLinkedList<Object> singlyLinkedList = new SinglyLinkedList<>();
-    singlyLinkedList.addLast(0);
-    singlyLinkedList.addLast(1);
-    singlyLinkedList.addLast(2);
-    singlyLinkedList.addLast(3);
+    AbstractLinkedList<Object> singlyLinkedList = new SinglyLinkedList<>();
+    for (int i = 0; i < 4; i++) {
+      singlyLinkedList.addLast(i);
+    }
     Assertions.assertEquals(0, singlyLinkedList.getHead().getData());
     Assertions.assertEquals(4, singlyLinkedList.getSize());
     Node<Object> firstNode = singlyLinkedList.removeFirst();
@@ -128,10 +128,10 @@ class SinglyLinkedListTest {
 
   @Test
   public void removeIndex() {
-    SinglyLinkedList<Object> singlyLinkedList = new SinglyLinkedList<>();
-    singlyLinkedList.addLast(1);
-    singlyLinkedList.addLast(2);
-    singlyLinkedList.addLast(3);
+    AbstractLinkedList<Object> singlyLinkedList = new SinglyLinkedList<>();
+    for (int i = 1; i < 4; i++) {
+      singlyLinkedList.addLast(i);
+    }
     Node<Object> removedIndex = singlyLinkedList.removeIndex(1);
     Assertions.assertEquals(2, removedIndex.getData());
     Assertions.assertEquals(2, singlyLinkedList.getSize());

@@ -3,6 +3,7 @@ package org.khiemtran.structures.linked_list.model;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.khiemtran.structures.linked_list.AbstractLinkedList;
 import org.khiemtran.structures.linked_list.model.CircularSinglyLinkedList;
 import org.khiemtran.structures.linked_list.model.Node;
 
@@ -11,7 +12,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static org.junit.jupiter.api.Assertions.*;
 
 class CircularSinglyLinkedListTest {
-  private CircularSinglyLinkedList<Integer> list;
+  private AbstractLinkedList<Integer> list;
 
   @BeforeEach
   public void setUp() {
@@ -20,7 +21,7 @@ class CircularSinglyLinkedListTest {
 
   @Test
   public void addLast() {
-    CircularSinglyLinkedList<Integer> circularSinglyLinkedList = new CircularSinglyLinkedList<>();
+    AbstractLinkedList<Integer> circularSinglyLinkedList = new CircularSinglyLinkedList<>();
     for (int i = 0; i < 2; i++) {
       circularSinglyLinkedList.addLast(i);
     }
@@ -29,7 +30,7 @@ class CircularSinglyLinkedListTest {
 
   @Test
   public void removeLast() {
-    CircularSinglyLinkedList<Integer> circularSinglyLinkedList = new CircularSinglyLinkedList<>();
+    AbstractLinkedList<Integer> circularSinglyLinkedList = new CircularSinglyLinkedList<>();
     AtomicInteger atomicInteger = new AtomicInteger(1);
     circularSinglyLinkedList.addLast(atomicInteger.getAndIncrement());
     circularSinglyLinkedList.addLast(atomicInteger.getAndIncrement());
@@ -47,7 +48,7 @@ class CircularSinglyLinkedListTest {
 
   @Test
   public void insert() {
-    CircularSinglyLinkedList<Integer> circularSinglyLinkedList = new CircularSinglyLinkedList<>();
+    AbstractLinkedList<Integer> circularSinglyLinkedList = new CircularSinglyLinkedList<>();
     IndexOutOfBoundsException indexOutOfBoundsException = Assertions.assertThrows(IndexOutOfBoundsException.class, () -> circularSinglyLinkedList.insert(1, -1));
     assertEquals("Index " + -1 + " out of bounds for size " + circularSinglyLinkedList.getSize(), indexOutOfBoundsException.getMessage());
     IndexOutOfBoundsException indexOutOfBoundsException1 = Assertions.assertThrows(IndexOutOfBoundsException.class, () -> circularSinglyLinkedList.insert(1, 1));
@@ -65,7 +66,7 @@ class CircularSinglyLinkedListTest {
 
   @Test
   public void addFirst() {
-    CircularSinglyLinkedList<Integer> circularSinglyLinkedList = getIntegerCircularSinglyLinkedList();
+    AbstractLinkedList<Integer> circularSinglyLinkedList = getIntegerCircularSinglyLinkedList();
     assertEquals(1, circularSinglyLinkedList.getHead().getData());
     assertEquals(1,
         circularSinglyLinkedList.getNodeAt(circularSinglyLinkedList.getSize() - 1).getNext().getData());
@@ -73,8 +74,8 @@ class CircularSinglyLinkedListTest {
     assertEquals(5, circularSinglyLinkedList.getSize());
   }
 
-  private static CircularSinglyLinkedList<Integer> getIntegerCircularSinglyLinkedList() {
-    CircularSinglyLinkedList<Integer> circularSinglyLinkedList = new CircularSinglyLinkedList<>();
+  private static AbstractLinkedList<Integer> getIntegerCircularSinglyLinkedList() {
+    AbstractLinkedList<Integer> circularSinglyLinkedList = new CircularSinglyLinkedList<>();
     AtomicInteger atomicInteger = new AtomicInteger(5);
     circularSinglyLinkedList.addFirst(atomicInteger.getAndDecrement());
     circularSinglyLinkedList.addFirst(atomicInteger.getAndDecrement());
@@ -86,7 +87,7 @@ class CircularSinglyLinkedListTest {
 
   @Test
   public void removeFirst() {
-    CircularSinglyLinkedList<Integer> circularSinglyLinkedList = new CircularSinglyLinkedList<>();
+    AbstractLinkedList<Integer> circularSinglyLinkedList = new CircularSinglyLinkedList<>();
     for (int i = 1; i < 6; i++) {
       circularSinglyLinkedList.addLast(i);
     }
@@ -100,7 +101,7 @@ class CircularSinglyLinkedListTest {
 
   @Test
   public void removeIndex() {
-    CircularSinglyLinkedList<Integer> circularSinglyLinkedList = new CircularSinglyLinkedList<>();
+    AbstractLinkedList<Integer> circularSinglyLinkedList = new CircularSinglyLinkedList<>();
     IndexOutOfBoundsException circularSinglyLinkedListEmpty = Assertions.assertThrows(IndexOutOfBoundsException.class,
         () -> circularSinglyLinkedList.removeIndex(1));
     assertEquals("Circular list is empty.", circularSinglyLinkedListEmpty.getMessage());
