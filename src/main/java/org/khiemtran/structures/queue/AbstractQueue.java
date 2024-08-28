@@ -44,7 +44,7 @@ public abstract class AbstractQueue<T> {
 
   public String display() {
     if (front == -1 && rear == -1) {
-      throw new IndexOutOfBoundsException("Queue is empty");
+      return "";
     }
     StringBuilder stringBuilder = new StringBuilder();
     for (int i = front; i <= rear; i++) {

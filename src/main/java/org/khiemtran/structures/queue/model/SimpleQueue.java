@@ -12,10 +12,11 @@ public class SimpleQueue<T> extends AbstractQueue<T> {
     if (isFull()) {
       throw new IllegalStateException("Queue is full.");
     }
-    if (front == -1) {
-      front = 0;
+    if (super.getFront() == -1) {
+      super.setFront(0);
     }
-    items[++rear] = data;
+    super.setRear(getRear() + 1);
+    items[super.getRear()] = data;
   }
 
   @Override
@@ -24,11 +25,11 @@ public class SimpleQueue<T> extends AbstractQueue<T> {
       throw new IllegalStateException("Queue is empty.");
     }
     T item = items[front];
-    if (front == rear) {
-      front = -1;
-      rear = -1;
+    if (super.getFront() == super.getRear()) {
+      super.setFront(-1);
+      super.setRear(-1);
     } else {
-      front++;
+      super.setFront(getFront() + 1);
     }
     return item;
   }
