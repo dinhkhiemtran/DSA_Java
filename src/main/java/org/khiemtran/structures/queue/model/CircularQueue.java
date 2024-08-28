@@ -12,11 +12,11 @@ public class CircularQueue<T> extends AbstractQueue<T> {
     if (isFull()) {
       throw new IllegalStateException("Circular Queue is full.");
     }
-    if (front == -1) {
-      front = 0;
+    if (super.getFront() == -1) {
+      super.setFront(0);
     }
-    rear = (rear + 1) % size;
-    items[rear] = data;
+    setRear((getRear() + 1) % getSize());
+    super.items[getRear()] = data;
   }
 
   @Override
@@ -24,38 +24,39 @@ public class CircularQueue<T> extends AbstractQueue<T> {
     if (isEmpty()) {
       throw new IllegalStateException("Circular Queue is empty.");
     }
-    T data = items[front];
-    if (front == rear) {
-      front = -1;
-      rear = -1;
+    T data = items[getFront()];
+    if (getFront() == getRear()) {
+      super.setFront(-1);
+      super.setRear(-1);
     } else {
-      front = (front + 1) % size;
+      super.setFront((getFront() + 1) % getSize());
     }
     return data;
   }
 
   private boolean isFull() {
-    return (front == 0 && rear == size - 1) || (rear == (front - 1) % (size - 1));
+    return (super.getFront() == 0 && super.getRear() == super.getSize() - 1)
+        || (super.getRear() == (super.getFront() - 1) % (super.getSize() - 1));
   }
 
   private boolean isEmpty() {
-    return front == -1;
+    return super.getFront() == -1;
   }
 
   @Override
   public String display() {
     if (isEmpty()) {
-      return "Queue is empty";
+      return "";
     }
     StringBuilder stringBuilder = new StringBuilder();
-    int i = front;
+    int i = super.getFront();
     while (true) {
       stringBuilder.append(items[i]);
-      if (i == rear) {
+      if (i == super.getRear()) {
         break;
       }
       stringBuilder.append(" -> ");
-      i = (i + 1) % size;
+      i = (i + 1) % super.getSize();
     }
     return stringBuilder.toString();
   }

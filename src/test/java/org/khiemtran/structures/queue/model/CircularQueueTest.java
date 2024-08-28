@@ -27,5 +27,6 @@ class CircularQueueTest {
     }
     IllegalStateException illegalStateException = Assertions.assertThrows(IllegalStateException.class, circularQueue::dequeue);
     Assertions.assertEquals("Circular Queue is empty.", illegalStateException.getMessage());
+    Assertions.assertEquals("", circularQueue.display());
   }
 }

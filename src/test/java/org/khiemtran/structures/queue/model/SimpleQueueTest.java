@@ -31,5 +31,6 @@ class SimpleQueueTest {
     Assertions.assertEquals(5, integerSimpleQueue.dequeue());
     IllegalStateException illegalStateException = Assertions.assertThrows(IllegalStateException.class, integerSimpleQueue::dequeue);
     Assertions.assertEquals("Queue is empty.", illegalStateException.getMessage());
+    Assertions.assertEquals("", integerSimpleQueue.display());
   }
 }
