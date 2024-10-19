@@ -1,17 +1,20 @@
 package org.khiemtran.structures.stack;
 
-import java.util.NoSuchElementException;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.EmptyStackException;
 
-public class Stack<T> {
-  private final T[] array;
+public class Stack<E> {
+  private static final int DEFAULT_INIT_CAPACITY = 16;
+  private E[] elements;
   private int top;
-  private final int size;
+  private int size;
 
   @SuppressWarnings("unchecked")
-  public Stack(int capacity) {
+  public Stack() {
     this.top = -1;
-    this.size = capacity;
-    this.array = (T[]) new Object[size];
+    this.size = 0;
+    this.elements = (E[]) new Object[DEFAULT_INIT_CAPACITY];
   }
 
   public int getTop() {
@@ -22,39 +25,61 @@ public class Stack<T> {
     return size;
   }
 
-  public T getPeek() {
-    if (top < 0)
-      throw new NoSuchElementException("Stack Underflow.");
-    return array[top];
+  public E getPeek() {
+    if (isEmpty()) {
+      throw new EmptyStackException();
+    }
+    return elements[top];
   }
 
-  public void push(T element) {
-    if (isFull())
-      throw new ArrayIndexOutOfBoundsException("Stack Overflow.");
-    array[++top] = element;
+  public void push(E element) {
+    ensureCapacity();
+    elements[++top] = element;
+    size++;
   }
 
-  private boolean isFull() {
-    return top == size - 1;
+  public void pushAll(Iterable<? extends E> src) {
+    for (E e : src) {
+      push(e);
+    }
   }
 
-  public T pop() {
-    T element;
-    if (isEmpty())
-      throw new NoSuchElementException("Stack Underflow.");
-    element = array[top];
-    top--;
+  public E pop() {
+    if (isEmpty()) {
+      throw new EmptyStackException();
+    }
+    E element = elements[top];
+    elements[top--] = null;
+    size--;
     return element;
   }
 
-  private boolean isEmpty() {
-    return top == -1;
+  public Collection<? super E> popAll(Collection<? super E> dst) {
+    while (!isEmpty()) {
+      dst.add(this.pop());
+    }
+    return dst;
   }
 
-  public void display() {
-    for (int i = top; i > -1; i--) {
-      System.out.println(array[i]);
+  private boolean isEmpty() {
+    return size == 0;
+  }
+
+  private void ensureCapacity() {
+    if (elements.length == size) {
+      elements = Arrays.copyOf(elements, 2 * size + 1);
     }
+  }
+
+  public String display() {
+    StringBuilder stringBuilder = new StringBuilder();
+    for (int i = 0; i <= top; i++) {
+      stringBuilder.append(elements[i]);
+      if (i != top) {
+        stringBuilder.append(",");
+      }
+    }
+    return stringBuilder.toString();
   }
 }
 
