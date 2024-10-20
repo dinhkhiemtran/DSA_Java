@@ -11,7 +11,7 @@ public class SinglyLinkedList<T> extends AbstractLinkedList<T> {
   public void addLast(T data) {
     Node<T> newNode = new Node<>(data);
     if (isEmpty()) {
-      this.head = newNode;
+      super.head = newNode;
     } else {
       Node<T> lastNode = getNodeAt(getSize() - 1);
       lastNode.setNext(newNode);
@@ -39,7 +39,7 @@ public class SinglyLinkedList<T> extends AbstractLinkedList<T> {
   }
 
   @Override
-  public void insert(T data, int index) {
+  public void add(T data, int index) {
     if (index < 0 || index > size) {
       throw new IndexOutOfBoundsException("Index " + index + " is out of bounds. Size: " + size);
     } else if (index == 0) {
@@ -53,6 +53,13 @@ public class SinglyLinkedList<T> extends AbstractLinkedList<T> {
       prevNode.setNext(newNode);
     }
     incrementSize();
+  }
+
+  @Override
+  public void addAll(Iterable<? extends T> src) {
+    for (T element : src) {
+      addLast(element);
+    }
   }
 
   @Override

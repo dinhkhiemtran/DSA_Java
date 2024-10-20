@@ -7,6 +7,7 @@ public class Node<T> {
 
   public Node(T data) {
     this.next = null;
+    this.previous = null;
     this.data = data;
   }
 

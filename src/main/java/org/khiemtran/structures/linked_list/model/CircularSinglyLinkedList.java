@@ -35,7 +35,7 @@ public class CircularSinglyLinkedList<T> extends AbstractLinkedList<T> {
   }
 
   @Override
-  public void insert(T data, int index) {
+  public void add(T data, int index) {
     if (index < 0 || index > size) {
       throw new IndexOutOfBoundsException("Index " + index + " out of bounds for size " + size);
     }
@@ -54,6 +54,13 @@ public class CircularSinglyLinkedList<T> extends AbstractLinkedList<T> {
       currentNode.setNext(newNode);
     }
     incrementSize();
+  }
+
+  @Override
+  public void addAll(Iterable<? extends T> src) {
+    for (T element : src) {
+      addLast(element);
+    }
   }
 
   @Override
@@ -126,6 +133,7 @@ public class CircularSinglyLinkedList<T> extends AbstractLinkedList<T> {
       throw new IndexOutOfBoundsException("Circular list is empty.");
     }
   }
+
   private void clearList() {
     head = null;
     setSize(0);

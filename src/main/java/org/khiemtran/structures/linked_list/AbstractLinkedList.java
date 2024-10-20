@@ -13,7 +13,6 @@ public abstract class AbstractLinkedList<T> implements LinkedListOperations<T> {
     this.size = 0;
   }
 
-  @Override
   public void setSize(int size) {
     this.size = size;
   }
@@ -28,7 +27,6 @@ public abstract class AbstractLinkedList<T> implements LinkedListOperations<T> {
     return tail;
   }
 
-  @Override
   public int getSize() {
     return size;
   }

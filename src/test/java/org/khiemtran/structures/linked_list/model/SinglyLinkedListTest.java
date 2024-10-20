@@ -53,23 +53,23 @@ class SinglyLinkedListTest {
   public void insert() {
     AbstractLinkedList<Object> singlyLinkedList = new SinglyLinkedList<>();
     IndexOutOfBoundsException indexOutOfBoundsException = Assertions.assertThrows(IndexOutOfBoundsException.class,
-        () -> singlyLinkedList.insert(1, -1));
+        () -> singlyLinkedList.add(1, -1));
     Assertions.assertEquals("Index -1 is out of bounds. Size: 0", indexOutOfBoundsException.getMessage());
     singlyLinkedList.addLast(1);
     singlyLinkedList.addLast(3);
-    singlyLinkedList.insert(2, 1);
+    singlyLinkedList.add(2, 1);
     Node<Object> head = singlyLinkedList.getHead();
     Assertions.assertEquals(2, head.getNext().getData());
-    singlyLinkedList.insert(0, 0);
+    singlyLinkedList.add(0, 0);
     Assertions.assertEquals(0, singlyLinkedList.getHead().getData());
-    singlyLinkedList.insert(4, 4);
+    singlyLinkedList.add(4, 4);
     Node<Object> currentNode = head;
     while (currentNode.getNext() != null) {
       currentNode = currentNode.getNext();
     }
     Assertions.assertEquals(4, currentNode.getData());
     System.out.println(singlyLinkedList.display());
-    singlyLinkedList.insert(5, 3);
+    singlyLinkedList.add(5, 3);
     Node<Object> currentNode1 = head;
     while (currentNode1.getNext() != null) {
       if (currentNode1.getData().equals(5)) {
@@ -79,7 +79,7 @@ class SinglyLinkedListTest {
     }
     Assertions.assertEquals(5, currentNode1.getData());
     IndexOutOfBoundsException indexOutOfBoundsException1 = Assertions.assertThrows(IndexOutOfBoundsException.class,
-        () -> singlyLinkedList.insert(10, 10));
+        () -> singlyLinkedList.add(10, 10));
     Assertions.assertEquals("Index 10 is out of bounds. Size: 7", indexOutOfBoundsException1.getMessage());
   }
 

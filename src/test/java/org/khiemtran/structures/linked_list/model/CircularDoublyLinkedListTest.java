@@ -40,22 +40,22 @@ class CircularDoublyLinkedListTest {
   }
 
   @Test
-  public void insert() {
+  public void add() {
     AbstractLinkedList<Integer> circularDoublyLinkedList = new CircularDoublyLinkedList<>();
     IndexOutOfBoundsException indexOutOfBoundsException = Assertions.assertThrows(IndexOutOfBoundsException.class,
-        () -> circularDoublyLinkedList.insert(1, -1));
+        () -> circularDoublyLinkedList.add(1, -1));
     Assertions.assertEquals("Index " + -1 + " out of bounds for size " + circularDoublyLinkedList.getSize(), indexOutOfBoundsException.getMessage());
     IndexOutOfBoundsException indexOutOfBoundsException1 = Assertions.assertThrows(IndexOutOfBoundsException.class,
-        () -> circularDoublyLinkedList.insert(1, 10));
+        () -> circularDoublyLinkedList.add(1, 10));
     Assertions.assertEquals("Index " + 10 + " out of bounds for size " + circularDoublyLinkedList.getSize(), indexOutOfBoundsException1.getMessage());
-    circularDoublyLinkedList.insert(1, 0);
+    circularDoublyLinkedList.add(1, 0);
     circularDoublyLinkedList.addLast(2);
-    circularDoublyLinkedList.insert(5, circularDoublyLinkedList.getSize());
+    circularDoublyLinkedList.add(5, circularDoublyLinkedList.getSize());
     Assertions.assertEquals("1 -> 2 -> 5 -> (head)", circularDoublyLinkedList.display());
     Assertions.assertEquals(1, circularDoublyLinkedList.getTail().getNext().getData());
     Assertions.assertEquals(5, circularDoublyLinkedList.getHead().getPrevious().getData());
-    circularDoublyLinkedList.insert(3, 2);
-    circularDoublyLinkedList.insert(4, 3);
+    circularDoublyLinkedList.add(3, 2);
+    circularDoublyLinkedList.add(4, 3);
     Assertions.assertEquals("1 -> 2 -> 3 -> 4 -> 5 -> (head)", circularDoublyLinkedList.display());
     Assertions.assertEquals(5, circularDoublyLinkedList.getSize());
   }

@@ -38,7 +38,7 @@ public class CircularDoublyLinkedList<T> extends AbstractLinkedList<T> {
   }
 
   @Override
-  public void insert(T data, int index) {
+  public void add(T data, int index) {
     int size = getSize();
     if (index < 0 || index > size) {
       throw new IndexOutOfBoundsException("Index " + index + " out of bounds for size " + size);
@@ -64,6 +64,13 @@ public class CircularDoublyLinkedList<T> extends AbstractLinkedList<T> {
     if (index == size - 1) {
       tail.setNext(head);
       head.setPrevious(tail);
+    }
+  }
+
+  @Override
+  public void addAll(Iterable<? extends T> list) {
+    for (T element : list) {
+      addLast(element);
     }
   }
 
