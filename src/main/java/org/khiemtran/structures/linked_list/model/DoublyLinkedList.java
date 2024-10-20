@@ -38,7 +38,7 @@ public class DoublyLinkedList<T> extends AbstractLinkedList<T> {
   }
 
   @Override
-  public void insert(T data, int index) {
+  public void add(T data, int index) {
     validateIndexForInsert(index);
     if (index == 0) {
       addFirst(data);
@@ -53,6 +53,13 @@ public class DoublyLinkedList<T> extends AbstractLinkedList<T> {
       newNode.setNext(current);
       current.setPrevious(newNode);
       incrementSize();
+    }
+  }
+
+  @Override
+  public void addAll(Iterable<? extends T> src) {
+    for (T element : src) {
+      addLast(element);
     }
   }
 

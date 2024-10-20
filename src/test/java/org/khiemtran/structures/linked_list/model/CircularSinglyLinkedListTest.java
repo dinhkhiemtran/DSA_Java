@@ -49,17 +49,17 @@ class CircularSinglyLinkedListTest {
   @Test
   public void insert() {
     AbstractLinkedList<Integer> circularSinglyLinkedList = new CircularSinglyLinkedList<>();
-    IndexOutOfBoundsException indexOutOfBoundsException = Assertions.assertThrows(IndexOutOfBoundsException.class, () -> circularSinglyLinkedList.insert(1, -1));
+    IndexOutOfBoundsException indexOutOfBoundsException = Assertions.assertThrows(IndexOutOfBoundsException.class, () -> circularSinglyLinkedList.add(1, -1));
     assertEquals("Index " + -1 + " out of bounds for size " + circularSinglyLinkedList.getSize(), indexOutOfBoundsException.getMessage());
-    IndexOutOfBoundsException indexOutOfBoundsException1 = Assertions.assertThrows(IndexOutOfBoundsException.class, () -> circularSinglyLinkedList.insert(1, 1));
+    IndexOutOfBoundsException indexOutOfBoundsException1 = Assertions.assertThrows(IndexOutOfBoundsException.class, () -> circularSinglyLinkedList.add(1, 1));
     assertEquals("Index " + 1 + " out of bounds for size " + circularSinglyLinkedList.getSize(), indexOutOfBoundsException1.getMessage());
-    circularSinglyLinkedList.insert(1, 0);
-    circularSinglyLinkedList.insert(2, 1);
+    circularSinglyLinkedList.add(1, 0);
+    circularSinglyLinkedList.add(2, 1);
     assertEquals(1, circularSinglyLinkedList.getHead().getData());
     assertEquals(2, circularSinglyLinkedList.getNodeAt(circularSinglyLinkedList.getSize() - 1).getData());
     circularSinglyLinkedList.addLast(4);
     circularSinglyLinkedList.addLast(5);
-    circularSinglyLinkedList.insert(3, 2);
+    circularSinglyLinkedList.add(3, 2);
     assertEquals(3, circularSinglyLinkedList.getNodeAt(2).getData());
     assertEquals(4, circularSinglyLinkedList.getNodeAt(3).getData());
   }
@@ -117,7 +117,7 @@ class CircularSinglyLinkedListTest {
     circularSinglyLinkedList.addLast(2);
     circularSinglyLinkedList.addLast(4);
     circularSinglyLinkedList.addLast(5);
-    circularSinglyLinkedList.insert(3, 2);
+    circularSinglyLinkedList.add(3, 2);
     assertEquals(3, circularSinglyLinkedList.getNodeAt(2).getData());
     assertEquals(3, circularSinglyLinkedList.removeIndex(2).getData());
     System.out.println(circularSinglyLinkedList.display());
@@ -190,14 +190,14 @@ class CircularSinglyLinkedListTest {
   @Test
   public void testInsertAtBeginning() {
     list.addLast(2);
-    list.insert(1, 0);
+    list.add(1, 0);
     assertEquals("1 -> 2 -> (head)", list.display());
   }
 
   @Test
   public void testInsertAtEnd() {
     list.addLast(1);
-    list.insert(2, 1);
+    list.add(2, 1);
     assertEquals("1 -> 2 -> (head)", list.display());
   }
 
@@ -205,7 +205,7 @@ class CircularSinglyLinkedListTest {
   public void testInsertAtMiddle() {
     list.addLast(1);
     list.addLast(3);
-    list.insert(2, 1);
+    list.add(2, 1);
     assertEquals("1 -> 2 -> 3 -> (head)", list.display());
   }
 

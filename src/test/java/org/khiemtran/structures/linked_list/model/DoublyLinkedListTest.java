@@ -36,20 +36,20 @@ class DoublyLinkedListTest {
   void insert() {
     AbstractLinkedList<Integer> doublyLinkedList = new DoublyLinkedList<>();
     IndexOutOfBoundsException indexOutOfBoundsException = assertThrows(IndexOutOfBoundsException.class,
-        () -> doublyLinkedList.insert(1, -1));
+        () -> doublyLinkedList.add(1, -1));
     Assertions.assertEquals("Index " + -1 + " out of bounds for size " + doublyLinkedList.getSize(),
         indexOutOfBoundsException.getMessage());
     IndexOutOfBoundsException indexOutOfBoundsException1 = assertThrows(IndexOutOfBoundsException.class,
-        () -> doublyLinkedList.insert(1, 1));
+        () -> doublyLinkedList.add(1, 1));
     Assertions.assertEquals("Index " + 1 + " out of bounds for size " + doublyLinkedList.getSize(),
         indexOutOfBoundsException1.getMessage());
-    doublyLinkedList.insert(1, 0);
+    doublyLinkedList.add(1, 0);
     Assertions.assertEquals(1, doublyLinkedList.getHead().getData());
-    doublyLinkedList.insert(2, 1);
+    doublyLinkedList.add(2, 1);
     Assertions.assertEquals(2, doublyLinkedList.getHead().getNext().getData());
     doublyLinkedList.addLast(4);
     doublyLinkedList.addLast(5);
-    doublyLinkedList.insert(3, 2);
+    doublyLinkedList.add(3, 2);
     Assertions.assertEquals(3, doublyLinkedList.getHead().getNext().getNext().getData());
   }
 
